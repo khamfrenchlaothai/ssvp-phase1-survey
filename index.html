@@ -379,6 +379,213 @@
             input, select, textarea { border-color: #999; }
             #photoPreview.has-image { max-height: 300px; }
         }
+
+        /* ===== ONE-PAGE A4 PDF TEMPLATE ===== */
+        #pdfTemplate {
+            display: none;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 10mm 12mm;
+            background: #ffffff;
+            color: #000000;
+            font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'Noto Sans Lao', 'Phetsarath OT', sans-serif;
+            font-size: 9pt;
+            line-height: 1.35;
+            box-sizing: border-box;
+        }
+        #pdfTemplate.rendering {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: -10000px;
+            z-index: -1;
+        }
+        .pdf-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 2px solid #1a5f7a;
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+        }
+        .pdf-title { line-height: 1.2; }
+        .pdf-title .logo {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #1a5f7a;
+            margin: 0;
+        }
+        .pdf-title .subtitle {
+            font-size: 8.5pt;
+            color: #555;
+            margin-top: 2px;
+        }
+        .pdf-meta {
+            font-size: 8.5pt;
+            text-align: right;
+            line-height: 1.5;
+        }
+        .pdf-meta .id-row { font-size: 9.5pt; font-weight: bold; color: #1a5f7a; }
+
+        .pdf-score-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff8f0;
+            border: 1.5px solid #f0c4a8;
+            border-radius: 6px;
+            padding: 6px 12px;
+            margin-bottom: 8px;
+        }
+        .pdf-score-banner .label { font-size: 8.5pt; color: #9a3412; font-weight: bold; }
+        .pdf-score-banner .score-value { font-size: 16pt; font-weight: bold; color: #9a3412; }
+        .pdf-score-banner .level-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 9pt;
+            font-weight: bold;
+            color: white;
+        }
+        .pdf-score-banner .level-low      { background: #16a34a; }
+        .pdf-score-banner .level-moderate { background: #eab308; }
+        .pdf-score-banner .level-urgent   { background: #dc2626; }
+
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px 14px;
+            margin-bottom: 6px;
+        }
+        .pdf-field {
+            border-bottom: 1px solid #d1d5db;
+            padding: 3px 0;
+            min-height: 26px;
+        }
+        .pdf-field .label {
+            font-size: 7pt;
+            font-weight: bold;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            display: block;
+            margin-bottom: 1px;
+        }
+        .pdf-field .value {
+            font-size: 9.5pt;
+            color: #000;
+            min-height: 12pt;
+            word-wrap: break-word;
+        }
+        .pdf-wide { grid-column: 1 / -1; }
+
+        .pdf-section-title {
+            font-size: 8pt;
+            font-weight: bold;
+            color: #1a5f7a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 10px 0 4px;
+            border-bottom: 1px solid #1a5f7a;
+            padding-bottom: 2px;
+        }
+
+        .pdf-vuln-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 8px;
+            font-size: 9pt;
+            margin: 2px 0;
+        }
+        .pdf-vuln-tag {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 8.5pt;
+        }
+        .pdf-vuln-none { color: #6b7280; font-style: italic; }
+
+        .pdf-photo-block {
+            margin: 8px 0;
+            text-align: center;
+        }
+        .pdf-photo-block img {
+            max-width: 100%;
+            max-height: 60mm;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+        }
+        .pdf-photo-block.empty {
+            border: 1px dashed #d1d5db;
+            border-radius: 6px;
+            min-height: 30mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-size: 9pt;
+        }
+
+        .pdf-notes {
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 6px 8px;
+            min-height: 18mm;
+            font-size: 9pt;
+            white-space: pre-wrap;
+        }
+        .pdf-notes.empty { color: #9ca3af; font-style: italic; }
+
+        .pdf-consent {
+            background: #fef9c3;
+            border: 1px solid #facc15;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 8.5pt;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pdf-consent .checkbox {
+            width: 12px;
+            height: 12px;
+            border: 1.5px solid #000;
+            display: inline-block;
+            text-align: center;
+            line-height: 10px;
+            font-weight: bold;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        .pdf-signatures {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 14px;
+            font-size: 8.5pt;
+        }
+        .pdf-signatures .sig-box {
+            border-top: 1px solid #000;
+            padding-top: 4px;
+            text-align: center;
+            color: #555;
+            min-height: 18mm;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .pdf-footer {
+            text-align: center;
+            font-size: 7pt;
+            color: #6b7280;
+            margin-top: 10px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 4px;
+        }
     </style>
 </head>
 <body>
@@ -592,6 +799,73 @@
   }
 }</pre>
     </details>
+</div>
+
+<!-- ===== HIDDEN ONE-PAGE PDF TEMPLATE (filled at export time) ===== -->
+<div id="pdfTemplate" aria-hidden="true">
+    <div class="pdf-header">
+        <div class="pdf-title">
+            <div class="logo">SSVP LAOS — Phase 1 Survey</div>
+            <div class="subtitle">ສສວປ ລາວ · ແບບສຳຫຼວດໄລຍະທີ 1 · Hailstorm Response 2026</div>
+        </div>
+        <div class="pdf-meta">
+            <div class="id-row">ID: <span id="pdfId">—</span></div>
+            <div>Survey date: <span id="pdfDate">—</span></div>
+            <div>Generated: <span id="pdfGenerated">—</span></div>
+        </div>
+    </div>
+
+    <div class="pdf-score-banner">
+        <div>
+            <div class="label">DAMAGE SCORE / ຄະແນນຄວາມເສຍຫາຍ</div>
+            <div><span class="score-value"><span id="pdfScore">0</span></span> <span style="font-size:10pt;color:#9a3412;"> / 70</span></div>
+        </div>
+        <div>
+            <span class="level-badge level-low" id="pdfLevelBadge">LOW</span>
+        </div>
+    </div>
+
+    <div class="pdf-section-title">Interviewer &amp; Household</div>
+    <div class="pdf-grid">
+        <div class="pdf-field"><span class="label">Interviewer / ຜູ້ສຳຫຼວດ</span><div class="value" id="pdfInterviewer"></div></div>
+        <div class="pdf-field"><span class="label">Household Head / ຫົວໜ້າຄອບຄົວ</span><div class="value" id="pdfBeneficiary"></div></div>
+        <div class="pdf-field"><span class="label">Phone / ເບີໂທ</span><div class="value" id="pdfPhone"></div></div>
+        <div class="pdf-field"><span class="label">Household Size / ຈຳນວນຄົນ</span><div class="value" id="pdfHH"></div></div>
+        <div class="pdf-field"><span class="label">Village / ບ້ານ (Sikhottabong)</span><div class="value" id="pdfVillage"></div></div>
+        <div class="pdf-field"><span class="label">GPS / ພິກັດ</span><div class="value" id="pdfGPS"></div></div>
+    </div>
+
+    <div class="pdf-section-title">Damage Assessment / ການປະເມີນຄວາມເສຍຫາຍ</div>
+    <div class="pdf-grid">
+        <div class="pdf-field"><span class="label">Roof Damage / ຫຼັງຄາ</span><div class="value" id="pdfRoof"></div></div>
+        <div class="pdf-field"><span class="label">Electrical Risk / ຄວາມສ່ຽງໄຟຟ້າ</span><div class="value" id="pdfElec"></div></div>
+        <div class="pdf-field pdf-wide"><span class="label">Ownership / ກຳມະສິດ</span><div class="value" id="pdfOwnership"></div></div>
+    </div>
+
+    <div class="pdf-section-title">Vulnerabilities / ກຸ່ມສ່ຽງ</div>
+    <div class="pdf-vuln-list" id="pdfVulnList"></div>
+
+    <div class="pdf-section-title">Photo / ຮູບພາບ</div>
+    <div class="pdf-photo-block" id="pdfPhotoBlock">
+        <img id="pdfPhoto" src="" alt="">
+    </div>
+
+    <div class="pdf-section-title">Notes / ໝາຍເຫດ</div>
+    <div class="pdf-notes" id="pdfNotes"></div>
+
+    <div class="pdf-consent">
+        <span class="checkbox" id="pdfConsentBox">✓</span>
+        <span>Consent confirmed — household head agreed to share data with SSVP Laos. / ຫົວໜ້າຄອບຄົວຍິນຍອມ.</span>
+    </div>
+
+    <div class="pdf-signatures">
+        <div class="sig-box">Interviewer signature / ລາຍເຊັນຜູ້ສຳຫຼວດ</div>
+        <div class="sig-box">Household head signature / ລາຍເຊັນຫົວໜ້າຄອບຄົວ</div>
+    </div>
+
+    <div class="pdf-footer">
+        SSVP Laos Emergency Response Team · chantavong.khamsone@gmail.com · WhatsApp +856 20 5651 7254
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
@@ -875,7 +1149,122 @@
         setStatus('📧 Opening email… remember to attach the PDF.', 'success');
     }
 
-    // ===== PDF =====
+    // ===== PDF TEMPLATE POPULATION =====
+    function fillPdfTemplate(d, opts) {
+        opts = opts || {};
+        const blank = !!opts.blank;
+        const dash = blank ? '________________________' : '—';
+
+        $('pdfId').textContent          = blank ? '________________' : (d.surveyId || dash);
+        $('pdfDate').textContent        = blank ? '____ / ____ / ________' : formatHumanDate(d.date);
+        $('pdfGenerated').textContent   = new Date().toLocaleString();
+
+        $('pdfInterviewer').textContent = blank ? '' : (d.interviewer || dash);
+        $('pdfBeneficiary').textContent = blank ? '' : (d.beneficiary || dash);
+        $('pdfPhone').textContent       = blank ? '' : (d.phone || dash);
+        $('pdfVillage').textContent     = blank ? '' : (d.village || dash);
+        $('pdfGPS').textContent         = blank ? '' : (d.gps || 'Not captured');
+
+        const hh = blank ? '' :
+            `Total: ${d.hhSize || '?'} · Children<5: ${d.hhChildren || '0'} · Elderly 65+: ${d.hhElderly || '0'}`;
+        $('pdfHH').textContent = hh;
+
+        $('pdfRoof').textContent      = blank ? '' : (d.roofText || dash);
+        $('pdfElec').textContent      = blank ? '' : (d.elecText || dash);
+        $('pdfOwnership').textContent = blank ? '' : (d.ownership || dash);
+
+        $('pdfScore').textContent = blank ? '__' : (d.score != null ? d.score : 0);
+        const lvl = $('pdfLevelBadge');
+        lvl.classList.remove('level-low', 'level-moderate', 'level-urgent');
+        if (blank) {
+            lvl.textContent = '____';
+            lvl.classList.add('level-low');
+        } else if (d.score >= 50) {
+            lvl.textContent = 'URGENT'; lvl.classList.add('level-urgent');
+        } else if (d.score >= 25) {
+            lvl.textContent = 'MODERATE'; lvl.classList.add('level-moderate');
+        } else {
+            lvl.textContent = 'LOW'; lvl.classList.add('level-low');
+        }
+
+        const vulnList = $('pdfVulnList');
+        vulnList.innerHTML = '';
+        if (blank) {
+            vulnList.innerHTML = `
+                <span class="pdf-vuln-tag">☐ Female-headed</span>
+                <span class="pdf-vuln-tag">☐ Single parent</span>
+                <span class="pdf-vuln-tag">☐ Elderly 65+</span>
+                <span class="pdf-vuln-tag">☐ Disability</span>
+                <span class="pdf-vuln-tag">☐ Pregnant</span>
+                <span class="pdf-vuln-tag">☐ Chronic illness</span>
+                <span class="pdf-vuln-tag">☐ Children &lt;5</span>`;
+        } else if (d.vuln && d.vuln !== 'None') {
+            d.vuln.split(',').forEach(v => {
+                const tag = document.createElement('span');
+                tag.className = 'pdf-vuln-tag';
+                tag.textContent = '✓ ' + v.trim();
+                vulnList.appendChild(tag);
+            });
+        } else {
+            vulnList.innerHTML = '<span class="pdf-vuln-none">None reported</span>';
+        }
+
+        const photoBlock = $('pdfPhotoBlock');
+        const photoImg = $('pdfPhoto');
+        const previewSrc = $('photoPreview').src;
+        const hasPhoto = !blank && $('photoPreview').classList.contains('has-image') && previewSrc;
+        if (hasPhoto) {
+            photoImg.src = previewSrc;
+            photoImg.style.display = 'inline-block';
+            photoBlock.classList.remove('empty');
+        } else {
+            photoImg.removeAttribute('src');
+            photoImg.style.display = 'none';
+            photoBlock.classList.add('empty');
+            photoBlock.innerHTML = blank
+                ? '<span>[ Attach photo of damage here ]</span>'
+                : '<span>No photo provided</span>';
+        }
+
+        const notesEl = $('pdfNotes');
+        if (blank) {
+            notesEl.textContent = '';
+            notesEl.classList.remove('empty');
+        } else if (d.notes) {
+            notesEl.textContent = d.notes;
+            notesEl.classList.remove('empty');
+        } else {
+            notesEl.textContent = '— No additional notes —';
+            notesEl.classList.add('empty');
+        }
+
+        $('pdfConsentBox').textContent = (blank || !d.consent) ? '☐' : '✓';
+    }
+
+    function renderPdf(filename) {
+        const tpl = $('pdfTemplate');
+        tpl.classList.add('rendering');
+
+        const opts = {
+            margin: 0,
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.95 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                windowWidth: tpl.scrollWidth
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+            pagebreak: { mode: ['avoid-all'] }
+        };
+
+        return html2pdf().from(tpl).set(opts).save().finally(() => {
+            tpl.classList.remove('rendering');
+        });
+    }
+
+    // ===== PDF (filled survey, one page) =====
     function downloadPDF() {
         const data = collectFormData();
         if (!data) return;
@@ -891,91 +1280,45 @@
         btn.textContent = '⌛ Generating PDF…';
         setStatus('⌛ Generating PDF…');
 
-        const root = $('formRoot');
-        html2pdf().from(root).set({
-            margin: [8, 8, 8, 8],
-            filename: `SSVP-${data.surveyId}-${data.beneficiary.replace(/\s+/g, '_')}.pdf`,
-            image:    { type: 'jpeg', quality: 0.92 },
-            html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-            jsPDF:    { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-        }).save().then(() => {
+        fillPdfTemplate(data, { blank: false });
+
+        const safeName = (data.beneficiary || 'survey').replace(/[^\p{L}\p{N}_-]+/gu, '_').slice(0, 40);
+        const filename = `SSVP-${data.surveyId}-${safeName}.pdf`;
+
+        renderPdf(filename).then(() => {
             backupToSheets(data);
             btn.disabled = false;
             btn.textContent = '📄 Download PDF / ດາວໂຫຼດ PDF';
-            setStatus('✅ PDF saved. Now tap WhatsApp or Email and attach it.', 'success');
+            setStatus('✅ PDF saved (1 page). Now tap WhatsApp or Email and attach it.', 'success');
         }).catch(err => {
             btn.disabled = false;
             btn.textContent = '📄 Download PDF / ດາວໂຫຼດ PDF';
-            setStatus('⚠️ PDF failed: ' + err.message + ' — using browser print instead.', 'error');
+            setStatus('⚠️ PDF failed: ' + err.message + ' — try browser print.', 'error');
             window.print();
         });
     }
 
-    // ===== BLANK PDF TEMPLATE =====
+    // ===== BLANK PDF TEMPLATE (one page, ready to print) =====
     function downloadBlankPDF() {
         if (typeof html2pdf === 'undefined') {
             alert('PDF library not loaded yet. Please try again in a moment.');
             return;
         }
-        if (!confirm('📋 Generate a BLANK printable template?\n\nThis temporarily clears the form, exports the PDF, then restores your data.')) return;
-
-        // Snapshot current state
-        const snapshot = {};
-        FIELD_IDS.forEach(id => snapshot[id] = $(id).value);
-        snapshot.vuln = Array.from(document.querySelectorAll('.vuln:checked')).map(cb => cb.value);
-        snapshot.consent = $('consent').checked;
-        snapshot.photoSrc = $('photoPreview').src;
-        snapshot.photoVisible = $('photoPreview').classList.contains('has-image');
-        const snapshotId = $('surveyId').textContent;
-
-        // Clear
-        FIELD_IDS.forEach(id => {
-            const el = $(id);
-            if (el.tagName === 'SELECT') el.selectedIndex = 0;
-            else el.value = '';
-        });
-        document.querySelectorAll('.vuln').forEach(cb => cb.checked = false);
-        $('consent').checked = false;
-        $('photoPreview').src = '';
-        $('photoPreview').classList.remove('has-image');
-        $('surveyId').textContent = '________________';
-        $('surveyDateInput').value = '';
-        $('surveyDateLabel').textContent = '____ / ____ / ________';
-        updateScore();
 
         const btn = $('blankPdfBtn');
         btn.disabled = true;
         btn.textContent = '⌛ Generating blank template…';
+        setStatus('⌛ Generating blank template…');
 
-        const restore = () => {
-            FIELD_IDS.forEach(id => $(id).value = snapshot[id] || '');
-            document.querySelectorAll('.vuln').forEach(cb => {
-                cb.checked = snapshot.vuln.includes(cb.value);
-            });
-            $('consent').checked = snapshot.consent;
-            if (snapshot.photoVisible) {
-                $('photoPreview').src = snapshot.photoSrc;
-                $('photoPreview').classList.add('has-image');
-            }
-            $('surveyId').textContent = snapshotId;
-            $('surveyDateLabel').textContent = formatHumanDate(snapshot.surveyDateInput || todayISO());
-            updateScore();
+        fillPdfTemplate({}, { blank: true });
+
+        renderPdf('SSVP-Phase1-Survey-Blank.pdf').then(() => {
             btn.disabled = false;
             btn.textContent = '📋 Download Blank PDF Template (for printing)';
-        };
-
-        html2pdf().from($('formRoot')).set({
-            margin: [8, 8, 8, 8],
-            filename: 'SSVP-Phase1-Survey-Blank.pdf',
-            image: { type: 'jpeg', quality: 0.92 },
-            html2canvas: { scale: 2, backgroundColor: '#ffffff' },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        }).save().then(() => {
-            restore();
             setStatus('✅ Blank template downloaded — print it for paper backup.', 'success');
         }).catch(err => {
-            restore();
+            btn.disabled = false;
+            btn.textContent = '📋 Download Blank PDF Template (for printing)';
             setStatus('⚠️ Blank PDF failed: ' + err.message, 'error');
         });
     }
