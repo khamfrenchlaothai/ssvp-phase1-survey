@@ -116,10 +116,18 @@
             border-radius: 10px;
             font-size: 16px; /* prevents iOS zoom */
             font-family: inherit;
-            background: #fff;
-            color: var(--text);
+            background: #ffffff !important;
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000;
+            caret-color: #000000;
             transition: border-color 0.15s, box-shadow 0.15s;
         }
+        input::placeholder, textarea::placeholder {
+            color: #9ca3af !important;
+            -webkit-text-fill-color: #9ca3af;
+            opacity: 1;
+        }
+        select option { color: #000000; background: #ffffff; }
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--accent);
@@ -350,7 +358,7 @@
                 --muted: #94a3b8;
                 --border: #334155;
             }
-            input, select, textarea { background: #0f172a; color: var(--text); }
+            input, select, textarea { background: #ffffff !important; color: #000000 !important; -webkit-text-fill-color: #000000; }
             section { background: #1e293b; }
             .priority-box { background: #422706; border-color: #92400e; }
             .priority-box h2 { color: #fed7aa; }
