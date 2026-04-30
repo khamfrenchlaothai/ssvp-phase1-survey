@@ -442,15 +442,26 @@
             #photo { background: #0f172a; }
         }
 
-        /* ===== PRINT STYLESHEET — used when user picks "Save as PDF" ===== */
+        /* ===== PRINT STYLESHEET — used when user picks "Save as PDF" =====
+           Selectors are kept simple (no `body >` direct-child combinators)
+           because iOS Safari can be flaky with those in print stylesheets. */
         @media print {
             @page { size: A4; margin: 8mm; }
-            html, body { background: white !important; margin: 0 !important; padding: 0 !important; }
-            /* Hide the entire interactive form */
-            body > .form-container { display: none !important; }
-            /* Show only the PDF template, in normal flow */
-            body > #pdfTemplateWrap { display: block !important; }
-            body > #pdfTemplateWrap > #pdfTemplate {
+            html, body {
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: auto !important;
+                height: auto !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            /* Hide everything that's not the PDF template */
+            .form-container { display: none !important; }
+            /* Show the template */
+            #pdfTemplateWrap { display: block !important; }
+            #pdfTemplate {
+                display: block !important;
                 width: auto !important;
                 min-height: auto !important;
                 margin: 0 !important;
@@ -917,10 +928,14 @@
     </div>
 
     <footer>
-        <p><strong>v5.1</strong> • SSVP Laos Emergency Response Team</p>
-        <p style="margin-top:4px; line-height:1.5;">
-            <strong>📄 PDF tip:</strong> Tap "Save as PDF" → in the print menu, choose <em>"Save as PDF"</em> as destination → file saves to Downloads → attach in WhatsApp / Email.
+        <p><strong>v5.2</strong> • SSVP Laos Emergency Response Team</p>
+        <p style="margin-top:6px; line-height:1.5;">
+            <strong>📄 Android / Samsung:</strong> Tap "Save as PDF" → choose <em>"Save as PDF"</em> destination → tap Save.
         </p>
+        <p style="margin-top:4px; line-height:1.5;">
+            <strong>📄 iPhone:</strong> Tap "Save as PDF" → pinch-OUT on preview → tap Share <span style="font-family:monospace;">⬆︎</span> → choose <em>"Save to Files"</em>.
+        </p>
+        <p style="margin-top:4px; line-height:1.5;">Then attach the PDF in WhatsApp / Email.</p>
     </footer>
 
     <details class="setup">
@@ -1595,24 +1610,57 @@
     // ===== PDF VIA NATIVE PRINT — bullet-proof on every device =====
     // The flow: fill the hidden #pdfTemplate, call window.print(), the
     // @media print stylesheet shows ONLY the template, the user picks
-    // "Save as PDF" as the destination → file lands in Downloads.
-    //
-    // Why this approach:
-    //   • zero CDN dependency (works offline once page is loaded)
-    //   • native browser rendering = perfect Lao text + photos always render
-    //   • no JS PDF library timing/CSS-compatibility bugs
-    //   • supported on every Android, iOS, Samsung, Chrome, Safari since forever
+    // "Save as PDF" as the destination → file lands in Downloads / Files.
+
+    // iOS Safari needs special handling:
+    //   1. window.print() MUST be called synchronously inside the click
+    //      handler — any setTimeout breaks the user-gesture chain and
+    //      iOS silently does nothing.
+    //   2. iOS doesn't show an obvious "Save as PDF" button — the user
+    //      has to pinch-zoom and use the Share icon. We show clear
+    //      bilingual instructions before opening the print sheet.
+    function isIOS() {
+        const ua = navigator.userAgent || '';
+        if (/iPad|iPhone|iPod/.test(ua)) return true;
+        // iPad on iOS 13+ reports as Mac — detect via touch points
+        if (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) return true;
+        return false;
+    }
+
+    function showIOSInstructions() {
+        // alert() blocks but stays in the user-gesture context, so the
+        // window.print() that follows is still honored by Safari.
+        alert(
+            '📱 iPhone — How to save the PDF\n\n' +
+            'On the next screen:\n\n' +
+            '1.  Pinch-OUT (zoom) on the preview thumbnail\n' +
+            '2.  Tap the Share icon  ⬆︎  (top-right)\n' +
+            '3.  Choose "Save to Files"\n' +
+            '4.  Pick a folder → tap Save\n\n' +
+            'Then in WhatsApp / Email, tap 📎 and attach the PDF.\n\n' +
+            'iPhone — ວິທີບັນທຶກ PDF: ຂະຫຍາຍຮູບ → ກົດປຸ່ມ Share → ເລືອກ "Save to Files"'
+        );
+    }
 
     function triggerPrint(filename) {
         // Set the document title so the saved PDF gets a sensible filename
         const originalTitle = document.title;
         if (filename) document.title = filename;
-        // Slight delay so the browser has time to flush layout
-        setTimeout(() => {
+
+        // Show instructions for iPhone users before opening print sheet
+        if (isIOS()) showIOSInstructions();
+
+        // CRITICAL: call print() synchronously here so iOS keeps the
+        // user-gesture context. NO setTimeout, NO requestAnimationFrame.
+        try {
             window.print();
-            // Restore title after print dialog closes
-            setTimeout(() => { document.title = originalTitle; }, 1000);
-        }, 60);
+        } catch (e) {
+            console.error('Print failed:', e);
+            setStatus('⚠️ Print could not open. Please use the browser menu → Print.', 'error');
+        }
+
+        // Restore title after the print dialog closes (this can be async)
+        setTimeout(() => { document.title = originalTitle; }, 1500);
     }
 
     // ===== PDF (filled survey) =====
