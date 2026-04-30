@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#1a5f7a">
     <meta name="description" content="SSVP Laos Phase 1 Survey — Hailstorm Response 2026">
+    <!-- Cache-busting so phones always get the latest version -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 
     <style>
         * { box-sizing: border-box; }
@@ -222,7 +226,8 @@
         }
         .photo-thumb {
             position: relative;
-            aspect-ratio: 1;
+            width: 100%;
+            height: 90px;
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid var(--border);
@@ -430,35 +435,37 @@
             #photo { background: #0f172a; }
         }
 
+        /* ===== PRINT STYLESHEET — used when user picks "Save as PDF" ===== */
         @media print {
-            body { background: white; padding: 0; }
-            .form-container { box-shadow: none; max-width: 100%; margin: 0; padding: 8px; }
-            .actions, details.setup, .status-bar, footer, .gps-btn, #photo { display: none !important; }
-            section { break-inside: avoid; border-color: #999; }
-            .score { background: #f5f5f5 !important; color: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            input, select, textarea { border-color: #999; }
-            .photo-grid img { max-height: 60mm; }
+            @page { size: A4; margin: 8mm; }
+            html, body { background: white !important; margin: 0 !important; padding: 0 !important; }
+            /* Hide the entire interactive form */
+            body > .form-container { display: none !important; }
+            /* Show only the PDF template, in normal flow */
+            body > #pdfTemplateWrap { display: block !important; }
+            body > #pdfTemplateWrap > #pdfTemplate {
+                width: auto !important;
+                min-height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                background: white !important;
+                color: black !important;
+            }
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
         }
 
-        /* ===== ONE-PAGE A4 PDF TEMPLATE ===== */
-        /* Hidden by default. During render, an overlay covers the screen so
-           the user only sees the spinner while the template is briefly shown
-           inside the viewport (required for html2canvas to capture it). */
+        /* ===== ONE-PAGE A4 PDF TEMPLATE =====
+           Hidden on screen, shown only when the user prints.
+           Print stylesheet at the bottom hides everything else. */
         #pdfTemplateWrap {
             display: none;
         }
-        #pdfTemplateWrap.rendering {
-            display: block;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 210mm;
-            z-index: 1;
-            background: white;
-        }
         #pdfTemplate {
             width: 210mm;
-            min-height: 297mm;
             padding: 10mm 12mm;
             background: #ffffff;
             color: #000000;
@@ -467,32 +474,6 @@
             line-height: 1.35;
             box-sizing: border-box;
         }
-        #pdfOverlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.88);
-            z-index: 99999;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-            gap: 14px;
-            text-align: center;
-            padding: 20px;
-        }
-        #pdfOverlay.active { display: flex; }
-        #pdfOverlay .spinner {
-            width: 44px;
-            height: 44px;
-            border: 4px solid rgba(255,255,255,0.25);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: pdf-spin 0.9s linear infinite;
-        }
-        @keyframes pdf-spin { to { transform: rotate(360deg); } }
         .pdf-header {
             display: flex;
             justify-content: space-between;
@@ -599,32 +580,34 @@
         }
         .pdf-vuln-none { color: #6b7280; font-style: italic; }
 
-        .pdf-photo-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 3mm;
+        .pdf-photo-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 6px 0;
             margin: 4px 0 8px;
+            table-layout: fixed;
         }
-        .pdf-photo-cell {
-            aspect-ratio: 1;
+        .pdf-photo-table td {
+            width: 20%;
+            height: 110px;
             border: 1px solid #d1d5db;
             border-radius: 3px;
             background: #f9fafb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
+            vertical-align: middle;
             font-size: 7pt;
             color: #9ca3af;
             position: relative;
+            padding: 0;
             overflow: hidden;
         }
-        .pdf-photo-cell img {
+        .pdf-photo-table td img {
             width: 100%;
-            height: 100%;
+            height: 110px;
             object-fit: cover;
             display: block;
         }
-        .pdf-photo-cell .pdf-photo-num {
+        .pdf-photo-table .pdf-photo-num {
             position: absolute;
             top: 2px;
             left: 3px;
@@ -640,7 +623,7 @@
             color: #9ca3af;
             font-style: italic;
             font-size: 8.5pt;
-            padding: 4mm 0;
+            padding: 6mm 0;
             border: 1px dashed #d1d5db;
             border-radius: 4px;
             margin: 4px 0 8px;
@@ -868,16 +851,18 @@
     </div>
 
     <div class="actions">
-        <button type="button" class="btn btn-pdf" id="pdfBtn">📄 Download PDF / ດາວໂຫຼດ PDF</button>
+        <button type="button" class="btn btn-pdf" id="pdfBtn">📄 Save as PDF / ບັນທຶກ PDF</button>
         <button type="button" class="btn btn-whatsapp" id="whatsappBtn">💚 Send via WhatsApp / ສົ່ງ WhatsApp</button>
         <button type="button" class="btn btn-email" id="emailBtn">📧 Send via Email / ສົ່ງອີເມວ</button>
         <button type="button" class="btn btn-secondary" id="newBtn">🔄 New Survey / ສຳຫຼວດໃໝ່</button>
-        <button type="button" class="btn btn-link" id="blankPdfBtn">📋 Download Blank PDF Template (for printing)</button>
+        <button type="button" class="btn btn-link" id="blankPdfBtn">📋 Print Blank Form Template</button>
     </div>
 
     <footer>
-        <p>v2.0 • SSVP Laos Emergency Response Team</p>
-        <p style="margin-top:4px;">Tip: Tap 📄 PDF first, then attach the saved file in WhatsApp/Email.</p>
+        <p><strong>v4.0</strong> • SSVP Laos Emergency Response Team</p>
+        <p style="margin-top:4px; line-height:1.5;">
+            <strong>📄 PDF tip:</strong> Tap "Save as PDF" → in the print menu, choose <em>"Save as PDF"</em> as destination → file saves to Downloads → attach in WhatsApp / Email.
+        </p>
     </footer>
 
     <details class="setup">
@@ -922,16 +907,7 @@
     </details>
 </div>
 
-<!-- ===== PDF GENERATION OVERLAY ===== -->
-<div id="pdfOverlay" aria-hidden="true">
-    <div class="spinner"></div>
-    <div id="pdfOverlayMsg">📄 Generating PDF…</div>
-    <div style="font-size: 0.85rem; opacity: 0.8; font-weight: 400;">
-        Please wait, do not close this page.
-    </div>
-</div>
-
-<!-- ===== HIDDEN ONE-PAGE PDF TEMPLATE (filled at export time) ===== -->
+<!-- ===== HIDDEN ONE-PAGE PDF TEMPLATE (shown only when printing) ===== -->
 <div id="pdfTemplateWrap" aria-hidden="true">
 <div id="pdfTemplate">
     <div class="pdf-header">
@@ -997,8 +973,6 @@
     </div>
 </div>
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
 
 <script>
 (function () {
@@ -1447,36 +1421,40 @@
 
         const photoSection = $('pdfPhotoSection');
         photoSection.innerHTML = '';
+
         if (blank) {
-            const grid = document.createElement('div');
-            grid.className = 'pdf-photo-grid';
+            const table = document.createElement('table');
+            table.className = 'pdf-photo-table';
+            const tr = document.createElement('tr');
             for (let i = 1; i <= 5; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'pdf-photo-cell';
-                cell.innerHTML = '<span class="pdf-photo-num">#' + i + '</span><span>Photo ' + i + '</span>';
-                grid.appendChild(cell);
+                const td = document.createElement('td');
+                td.innerHTML = '<span class="pdf-photo-num">#' + i + '</span>Photo ' + i;
+                tr.appendChild(td);
             }
-            photoSection.appendChild(grid);
+            table.appendChild(tr);
+            photoSection.appendChild(table);
         } else if (typeof photos !== 'undefined' && photos.length > 0) {
-            const grid = document.createElement('div');
-            grid.className = 'pdf-photo-grid';
+            const table = document.createElement('table');
+            table.className = 'pdf-photo-table';
+            const tr = document.createElement('tr');
             for (let i = 0; i < 5; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'pdf-photo-cell';
+                const td = document.createElement('td');
                 if (photos[i]) {
-                    const img = document.createElement('img');
-                    img.src = photos[i];
                     const num = document.createElement('span');
                     num.className = 'pdf-photo-num';
                     num.textContent = '#' + (i + 1);
-                    cell.appendChild(img);
-                    cell.appendChild(num);
+                    const img = document.createElement('img');
+                    img.src = photos[i];
+                    img.alt = 'Photo ' + (i + 1);
+                    td.appendChild(img);
+                    td.appendChild(num);
                 } else {
-                    cell.innerHTML = '<span style="font-size:7pt;color:#cbd5e1;">—</span>';
+                    td.innerHTML = '<span style="font-size:7pt;color:#cbd5e1;">—</span>';
                 }
-                grid.appendChild(cell);
+                tr.appendChild(td);
             }
-            photoSection.appendChild(grid);
+            table.appendChild(tr);
+            photoSection.appendChild(table);
         } else {
             const empty = document.createElement('div');
             empty.className = 'pdf-photo-empty-msg';
@@ -1499,107 +1477,48 @@
         $('pdfConsentBox').textContent = (blank || !d.consent) ? '☐' : '✓';
     }
 
-    function renderPdf(filename, msg) {
-        const tpl = $('pdfTemplate');
-        const wrap = $('pdfTemplateWrap');
-        const overlay = $('pdfOverlay');
-        const overlayMsg = $('pdfOverlayMsg');
+    // ===== PDF VIA NATIVE PRINT — bullet-proof on every device =====
+    // The flow: fill the hidden #pdfTemplate, call window.print(), the
+    // @media print stylesheet shows ONLY the template, the user picks
+    // "Save as PDF" as the destination → file lands in Downloads.
+    //
+    // Why this approach:
+    //   • zero CDN dependency (works offline once page is loaded)
+    //   • native browser rendering = perfect Lao text + photos always render
+    //   • no JS PDF library timing/CSS-compatibility bugs
+    //   • supported on every Android, iOS, Samsung, Chrome, Safari since forever
 
-        if (msg) overlayMsg.textContent = msg;
-        overlay.classList.add('active');
-        wrap.classList.add('rendering');
-
-        const cleanup = () => {
-            wrap.classList.remove('rendering');
-            overlay.classList.remove('active');
-        };
-
-        // Wait two animation frames so the browser actually paints the
-        // template before html2canvas measures and renders it.
-        return new Promise((resolve, reject) => {
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    void tpl.offsetHeight; // force layout
-
-                    const opts = {
-                        margin: 0,
-                        filename: filename,
-                        image: { type: 'jpeg', quality: 0.95 },
-                        html2canvas: {
-                            scale: 2,
-                            useCORS: true,
-                            backgroundColor: '#ffffff',
-                            logging: false
-                        },
-                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
-                        pagebreak: { mode: ['avoid-all'] }
-                    };
-
-                    html2pdf().from(tpl).set(opts).save()
-                        .then(() => { cleanup(); resolve(); })
-                        .catch(err => { cleanup(); reject(err); });
-                });
-            });
-        });
+    function triggerPrint(filename) {
+        // Set the document title so the saved PDF gets a sensible filename
+        const originalTitle = document.title;
+        if (filename) document.title = filename;
+        // Slight delay so the browser has time to flush layout
+        setTimeout(() => {
+            window.print();
+            // Restore title after print dialog closes
+            setTimeout(() => { document.title = originalTitle; }, 1000);
+        }, 60);
     }
 
-    // ===== PDF (filled survey, one page) =====
+    // ===== PDF (filled survey) =====
     function downloadPDF() {
         const data = collectFormData();
         if (!data) return;
 
-        if (typeof html2pdf === 'undefined') {
-            alert('PDF library not loaded yet. Falling back to browser Print → "Save as PDF".');
-            window.print();
-            return;
-        }
-
-        const btn = $('pdfBtn');
-        btn.disabled = true;
-        btn.textContent = '⌛ Generating PDF…';
-        setStatus('⌛ Generating PDF…');
-
         fillPdfTemplate(data, { blank: false });
+        backupToSheets(data);
 
         const safeName = (data.beneficiary || 'survey').replace(/[\s\\\/:*?"<>|]+/g, '_').slice(0, 40);
-        const filename = `SSVP-${data.surveyId}-${safeName}.pdf`;
+        triggerPrint('SSVP-' + data.surveyId + '-' + safeName);
 
-        renderPdf(filename, '📄 Generating survey PDF…').then(() => {
-            backupToSheets(data);
-            btn.disabled = false;
-            btn.textContent = '📄 Download PDF / ດາວໂຫຼດ PDF';
-            setStatus('✅ PDF saved (1 page). Now tap WhatsApp or Email and attach it.', 'success');
-        }).catch(err => {
-            btn.disabled = false;
-            btn.textContent = '📄 Download PDF / ດາວໂຫຼດ PDF';
-            setStatus('⚠️ PDF failed: ' + err.message + ' — try browser print.', 'error');
-            window.print();
-        });
+        setStatus('📄 Print menu opened — choose "Save as PDF" as destination, then attach the file in WhatsApp/Email.', 'success');
     }
 
-    // ===== BLANK PDF TEMPLATE (one page, ready to print) =====
+    // ===== BLANK PDF TEMPLATE (printable) =====
     function downloadBlankPDF() {
-        if (typeof html2pdf === 'undefined') {
-            alert('PDF library not loaded yet. Please try again in a moment.');
-            return;
-        }
-
-        const btn = $('blankPdfBtn');
-        btn.disabled = true;
-        btn.textContent = '⌛ Generating blank template…';
-        setStatus('⌛ Generating blank template…');
-
         fillPdfTemplate({}, { blank: true });
-
-        renderPdf('SSVP-Phase1-Survey-Blank.pdf', '📋 Generating blank template…').then(() => {
-            btn.disabled = false;
-            btn.textContent = '📋 Download Blank PDF Template (for printing)';
-            setStatus('✅ Blank template downloaded — print it for paper backup.', 'success');
-        }).catch(err => {
-            btn.disabled = false;
-            btn.textContent = '📋 Download Blank PDF Template (for printing)';
-            setStatus('⚠️ Blank PDF failed: ' + err.message, 'error');
-        });
+        triggerPrint('SSVP-Phase1-Survey-Blank');
+        setStatus('📋 Print menu opened — choose "Save as PDF" or send to a printer.', 'success');
     }
 
     // ===== GOOGLE SHEETS BACKUP (silent) =====
