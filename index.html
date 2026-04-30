@@ -508,38 +508,6 @@
     </section>
 
     <section>
-        <h2>💧 Living Conditions / ສະພາບຄວາມເປັນຢູ່</h2>
-        <div class="field">
-            <label for="water">Water source / ແຫຼ່ງນ້ຳ</label>
-            <select id="water">
-                <option value="">— Select / ເລືອກ —</option>
-                <option value="Piped water working / ນ້ຳປະປາໃຊ້ໄດ້">🟢 Piped water working / ນ້ຳປະປາໃຊ້ໄດ້</option>
-                <option value="Piped water damaged / ນ້ຳປະປາເສຍ">🟡 Piped water damaged / ນ້ຳປະປາເສຍ</option>
-                <option value="Well / ນ້ຳສ້າງ">💧 Well / ນ້ຳສ້າງ</option>
-                <option value="No safe water / ບໍ່ມີນ້ຳສະອາດ">🔴 No safe water / ບໍ່ມີນ້ຳສະອາດ</option>
-            </select>
-        </div>
-        <div class="field">
-            <label for="sanitation">Sanitation / ສຸຂາພິບານ</label>
-            <select id="sanitation">
-                <option value="">— Select / ເລືອກ —</option>
-                <option value="Toilet working / ຫ້ອງນ້ຳໃຊ້ໄດ້">🟢 Toilet working / ຫ້ອງນ້ຳໃຊ້ໄດ້</option>
-                <option value="Toilet damaged / ຫ້ອງນ້ຳເສຍ">🟡 Toilet damaged / ຫ້ອງນ້ຳເສຍ</option>
-                <option value="No toilet / ບໍ່ມີຫ້ອງນ້ຳ">🔴 No toilet / ບໍ່ມີຫ້ອງນ້ຳ</option>
-            </select>
-        </div>
-        <div class="field">
-            <label for="food">Food security / ຄວາມໝັ້ນຄົງດ້ານອາຫານ</label>
-            <select id="food">
-                <option value="">— Select / ເລືອກ —</option>
-                <option value="Sufficient / ພຽງພໍ">🟢 Sufficient / ພຽງພໍ</option>
-                <option value="Limited 1–2 weeks / ຈຳກັດ 1-2 ອາທິດ">🟡 Limited 1–2 weeks</option>
-                <option value="Critical <1 week / ວິກິດ <1 ອາທິດ">🔴 Critical &lt;1 week</option>
-            </select>
-        </div>
-    </section>
-
-    <section>
         <h2>📷 Photo / ຮູບພາບ <small style="font-weight:400;color:var(--muted);">(optional)</small></h2>
         <input type="file" id="photo" accept="image/*" capture="environment">
         <img id="photoPreview" alt="Damage photo preview">
@@ -599,14 +567,14 @@
         'Received','Survey ID','Survey Date','Interviewer','Beneficiary',
         'Phone','Village','GPS','HH Size','Children<5','Elderly 65+',
         'Roof Damage','Electrical Risk','Damage Score','Vulnerabilities',
-        'Ownership','Water','Sanitation','Food Security','Notes','Consent'
+        'Ownership','Notes','Consent'
       ]);
     }
     sheet.appendRow([
       new Date(), d.surveyId, d.date, d.interviewer, d.beneficiary,
       d.phone, d.village, d.gps, d.hhSize, d.hhChildren, d.hhElderly,
       d.roofText, d.elecText, d.score, d.vuln,
-      d.ownership, d.water, d.sanitation, d.food, d.notes, d.consent ? 'Yes' : 'No'
+      d.ownership, d.notes, d.consent ? 'Yes' : 'No'
     ]);
     return ContentService.createTextOutput(JSON.stringify({ok:true}))
       .setMimeType(ContentService.MimeType.JSON);
@@ -673,7 +641,7 @@
         'hhSize', 'hhChildren', 'hhElderly',
         'village', 'gps',
         'roofDamage', 'electricalRisk',
-        'ownership', 'water', 'sanitation', 'food',
+        'ownership',
         'notes'
     ];
 
@@ -725,9 +693,6 @@
             roofText, elecText, score,
             vuln:       vuln.length ? vuln.join(', ') : 'None',
             ownership:  $('ownership').value,
-            water:      $('water').value || 'Not specified',
-            sanitation: $('sanitation').value || 'Not specified',
-            food:       $('food').value || 'Not specified',
             notes:      $('notes').value.trim(),
             consent
         };
@@ -869,9 +834,6 @@
             '📊 Damage score: ' + d.score + ' / 70',
             '🫂 Vulnerabilities: ' + d.vuln,
             '📄 Ownership: ' + d.ownership,
-            '💧 Water: ' + d.water,
-            '🚽 Sanitation: ' + d.sanitation,
-            '🍚 Food: ' + d.food,
             '─────────────────────',
             d.notes ? '📝 Notes: ' + d.notes : '',
             '',
