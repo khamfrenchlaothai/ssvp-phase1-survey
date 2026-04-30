@@ -149,6 +149,13 @@
         }
         .row-3 .field { margin-top: 10px; }
 
+        .row-2-13 {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 8px;
+        }
+        .row-2-13 .field { margin-top: 10px; }
+
         .priority-box {
             background: #fff8f0;
             border-color: #f0c4a8;
@@ -825,6 +832,57 @@
     </section>
 
     <section>
+        <h2>🔨 Repair Capacity / ຄວາມສາມາດໃນການສ້ອມແປງ</h2>
+
+        <div class="field">
+            <label for="helpersAvailable">People available to help with repairs / ມີຄົນຊ່ວຍສ້ອມແປງບໍ່?</label>
+            <select id="helpersAvailable">
+                <option value="">— Select / ເລືອກ —</option>
+                <option value="Yes / ມີ">✅ Yes / ມີ</option>
+                <option value="No / ບໍ່ມີ">❌ No / ບໍ່ມີ</option>
+                <option value="Maybe / ບາງທີ">🤔 Maybe / ບາງທີ</option>
+            </select>
+        </div>
+
+        <div class="row-2-13">
+            <div class="field">
+                <label for="helpersCount">Number / ຈຳນວນ</label>
+                <input type="number" id="helpersCount" min="0" max="50" inputmode="numeric" placeholder="0">
+            </div>
+            <div class="field">
+                <label for="helpersDate">Available date / ວັນທີຊ່ວຍໄດ້</label>
+                <input type="date" id="helpersDate">
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="aluminumOk">Accept aluminum roofing for repair? / ຍອມຮັບຫຼັງຄາອາລູມິນຽມບໍ່?</label>
+            <select id="aluminumOk">
+                <option value="">— Select / ເລືອກ —</option>
+                <option value="Yes / ຍອມຮັບ">✅ Yes / ຍອມຮັບ</option>
+                <option value="No / ບໍ່ຍອມຮັບ">❌ No / ບໍ່ຍອມຮັບ</option>
+                <option value="Not sure / ບໍ່ແນ່ໃຈ">🤔 Not sure / ບໍ່ແນ່ໃຈ</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="localWorkers">Local workers available in your village? / ມີຊ່າງໃນບ້ານບໍ່?</label>
+            <select id="localWorkers">
+                <option value="">— Select / ເລືອກ —</option>
+                <option value="Yes / ມີ">✅ Yes / ມີ</option>
+                <option value="No / ບໍ່ມີ">❌ No / ບໍ່ມີ</option>
+                <option value="Don't know / ບໍ່ຮູ້">❓ Don't know / ບໍ່ຮູ້</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="laborCost">Labor cost / ຄ່າແຮງງານ <small style="font-weight:400;color:var(--muted);">(LAK / m²)</small></label>
+            <input type="number" id="laborCost" min="0" step="1000" inputmode="numeric" placeholder="e.g. 50000">
+            <small class="hint">Local worker labor rate in Lao Kip per square meter / ຄ່າແຮງງານຊ່າງທ້ອງຖິ່ນ ກີບ ຕໍ່ ຕາຣາງແມັດ</small>
+        </div>
+    </section>
+
+    <section>
         <h2>📷 Photos / ຮູບພາບ <small style="font-weight:400;color:var(--muted);">(up to 5)</small></h2>
         <input type="file" id="photo" accept="image/*" capture="environment" multiple style="display:none">
         <button type="button" class="add-photo-btn" id="addPhotoBtn">📷 Take / Add Photo · ຖ່າຍຮູບ</button>
@@ -859,7 +917,7 @@
     </div>
 
     <footer>
-        <p><strong>v4.0</strong> • SSVP Laos Emergency Response Team</p>
+        <p><strong>v5.1</strong> • SSVP Laos Emergency Response Team</p>
         <p style="margin-top:4px; line-height:1.5;">
             <strong>📄 PDF tip:</strong> Tap "Save as PDF" → in the print menu, choose <em>"Save as PDF"</em> as destination → file saves to Downloads → attach in WhatsApp / Email.
         </p>
@@ -888,14 +946,20 @@
         'Received','Survey ID','Survey Date','Interviewer','Beneficiary',
         'Phone','Village','GPS','HH Size','Children<5','Elderly 65+',
         'Roof Damage','Electrical Risk','Damage Score','Vulnerabilities',
-        'Ownership','Notes','Consent'
+        'Ownership',
+        'Helpers Available','Helpers Count','Helpers Date',
+        'Aluminum OK','Local Workers','Labor Cost (LAK/m²)',
+        'Notes','Consent'
       ]);
     }
     sheet.appendRow([
       new Date(), d.surveyId, d.date, d.interviewer, d.beneficiary,
       d.phone, d.village, d.gps, d.hhSize, d.hhChildren, d.hhElderly,
       d.roofText, d.elecText, d.score, d.vuln,
-      d.ownership, d.notes, d.consent ? 'Yes' : 'No'
+      d.ownership,
+      d.helpersAvailable, d.helpersCount, d.helpersDate,
+      d.aluminumOk, d.localWorkers, d.laborCost,
+      d.notes, d.consent ? 'Yes' : 'No'
     ]);
     return ContentService.createTextOutput(JSON.stringify({ok:true}))
       .setMimeType(ContentService.MimeType.JSON);
@@ -947,6 +1011,15 @@
         <div class="pdf-field"><span class="label">Roof Damage / ຫຼັງຄາ</span><div class="value" id="pdfRoof"></div></div>
         <div class="pdf-field"><span class="label">Electrical Risk / ຄວາມສ່ຽງໄຟຟ້າ</span><div class="value" id="pdfElec"></div></div>
         <div class="pdf-field pdf-wide"><span class="label">Ownership / ກຳມະສິດ</span><div class="value" id="pdfOwnership"></div></div>
+    </div>
+
+    <div class="pdf-section-title">Repair Capacity / ຄວາມສາມາດໃນການສ້ອມແປງ</div>
+    <div class="pdf-grid">
+        <div class="pdf-field"><span class="label">Helpers Available / ຄົນຊ່ວຍ</span><div class="value" id="pdfHelpers"></div></div>
+        <div class="pdf-field"><span class="label">Available Date / ວັນທີ</span><div class="value" id="pdfHelpersDate"></div></div>
+        <div class="pdf-field"><span class="label">Aluminum Roofing OK / ຍອມຮັບອາລູມິນຽມ</span><div class="value" id="pdfAluminumOk"></div></div>
+        <div class="pdf-field"><span class="label">Local Workers / ຊ່າງໃນບ້ານ</span><div class="value" id="pdfLocalWorkers"></div></div>
+        <div class="pdf-field pdf-wide"><span class="label">Labor Cost / ຄ່າແຮງງານ (LAK / m²)</span><div class="value" id="pdfLaborCost"></div></div>
     </div>
 
     <div class="pdf-section-title">Vulnerabilities / ກຸ່ມສ່ຽງ</div>
@@ -1028,6 +1101,8 @@
         'village', 'gps',
         'roofDamage', 'electricalRisk',
         'ownership',
+        'helpersAvailable', 'helpersCount', 'helpersDate',
+        'aluminumOk', 'localWorkers', 'laborCost',
         'notes'
     ];
 
@@ -1079,6 +1154,12 @@
             roofText, elecText, score,
             vuln:       vuln.length ? vuln.join(', ') : 'None',
             ownership:  $('ownership').value,
+            helpersAvailable: $('helpersAvailable').value || 'Not specified',
+            helpersCount:     $('helpersCount').value || '',
+            helpersDate:      $('helpersDate').value || '',
+            aluminumOk:       $('aluminumOk').value || 'Not specified',
+            localWorkers:     $('localWorkers').value || 'Not specified',
+            laborCost:        $('laborCost').value || '',
             notes:      $('notes').value.trim(),
             consent
         };
@@ -1309,6 +1390,15 @@
 
     // ===== MESSAGE BUILDERS =====
     function buildPlainMessage(d) {
+        const helpersLine = (d.helpersAvailable && d.helpersAvailable !== 'Not specified')
+            ? d.helpersAvailable +
+              (d.helpersCount ? ' (' + d.helpersCount + ' people)' : '') +
+              (d.helpersDate ? ' on ' + formatHumanDate(d.helpersDate) : '')
+            : 'Not specified';
+        const costLine = d.laborCost
+            ? Number(d.laborCost).toLocaleString() + ' LAK / m²'
+            : 'Not specified';
+
         return [
             '📋 SSVP LAOS — PHASE 1 SURVEY',
             '─────────────────────',
@@ -1326,6 +1416,11 @@
             '📊 Damage score: ' + d.score + ' / 70',
             '🫂 Vulnerabilities: ' + d.vuln,
             '📄 Ownership: ' + d.ownership,
+            '─── REPAIR CAPACITY ───',
+            '🤝 Helpers: ' + helpersLine,
+            '🪟 Aluminum roofing OK: ' + d.aluminumOk,
+            '👷 Local workers: ' + d.localWorkers,
+            '💰 Labor cost: ' + costLine,
             '─────────────────────',
             d.notes ? '📝 Notes: ' + d.notes : '',
             '',
@@ -1382,6 +1477,26 @@
         $('pdfRoof').textContent      = blank ? '' : (d.roofText || dash);
         $('pdfElec').textContent      = blank ? '' : (d.elecText || dash);
         $('pdfOwnership').textContent = blank ? '' : (d.ownership || dash);
+
+        // Repair capacity
+        if (blank) {
+            $('pdfHelpers').textContent       = '';
+            $('pdfHelpersDate').textContent   = '';
+            $('pdfAluminumOk').textContent    = '';
+            $('pdfLocalWorkers').textContent  = '';
+            $('pdfLaborCost').textContent     = '';
+        } else {
+            const helpersText = (d.helpersAvailable && d.helpersAvailable !== 'Not specified')
+                ? d.helpersAvailable + (d.helpersCount ? ' — ' + d.helpersCount + ' person(s)' : '')
+                : 'Not specified';
+            $('pdfHelpers').textContent      = helpersText;
+            $('pdfHelpersDate').textContent  = d.helpersDate ? formatHumanDate(d.helpersDate) : '—';
+            $('pdfAluminumOk').textContent   = d.aluminumOk || '—';
+            $('pdfLocalWorkers').textContent = d.localWorkers || '—';
+            $('pdfLaborCost').textContent    = d.laborCost
+                ? Number(d.laborCost).toLocaleString() + ' LAK / m²'
+                : 'Not specified';
+        }
 
         $('pdfScore').textContent = blank ? '__' : (d.score != null ? d.score : 0);
         const lvl = $('pdfLevelBadge');
