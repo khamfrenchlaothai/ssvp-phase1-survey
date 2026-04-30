@@ -3,278 +3,1068 @@
 <head>
     <meta charset="UTF-8">
     <title>SSVP Laos - Phase 1 Survey</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1a5f7a">
+    <meta name="description" content="SSVP Laos Phase 1 Survey — Hailstorm Response 2026">
+
     <style>
-        * {
-            box-sizing: border-box;
+        * { box-sizing: border-box; }
+
+        :root {
+            --primary: #1a5f7a;
+            --accent: #667eea;
+            --accent-2: #764ba2;
+            --whatsapp: #25D366;
+            --whatsapp-2: #128C7E;
+            --email: #2980b9;
+            --email-2: #1a5276;
+            --pdf: #e74c3c;
+            --pdf-2: #c0392b;
+            --bg: #f4f6fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --green: #16a34a;
+            --yellow: #eab308;
+            --red: #dc2626;
+            --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
         }
+
+        html, body { margin: 0; padding: 0; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial', sans-serif;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans Lao', 'Phetsarath OT', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
+            padding: 12px;
+            line-height: 1.45;
+            -webkit-text-size-adjust: 100%;
         }
+
         .form-container {
-            background: white;
-            max-width: 550px;
-            margin: 20px auto;
-            padding: 25px;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: var(--card);
+            max-width: 620px;
+            margin: 16px auto;
+            padding: 18px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
         }
-        h2 {
-            color: #1a5f7a;
-            font-size: 1.5rem;
-            margin: 0 0 5px 0;
-            text-align: center;
+
+        header { text-align: center; margin-bottom: 14px; }
+        header h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 1.4rem;
+            line-height: 1.2;
         }
-        h2 small {
-            font-size: 0.7rem;
-            font-weight: normal;
-            color: #666;
-            display: block;
+        header .subtitle {
+            margin: 4px 0 6px;
+            font-size: 0.8rem;
+            color: var(--muted);
         }
+        header .meta {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin: 0;
+            flex-wrap: wrap;
+        }
+        header .meta strong { color: var(--primary); }
+
+        section {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 12px 14px;
+            margin: 12px 0;
+            background: #fff;
+        }
+        section h2 {
+            margin: 0 0 10px;
+            font-size: 0.95rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .field { margin-top: 10px; }
+        .field:first-of-type { margin-top: 0; }
+
         label {
-            margin-top: 15px;
             display: block;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            color: var(--text);
         }
-        input, select {
+        small.hint {
+            display: block;
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        input[type="text"], input[type="tel"], input[type="number"],
+        input[type="date"], input[type="email"], select, textarea {
             width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font-size: 16px;
+            padding: 11px 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px; /* prevents iOS zoom */
+            font-family: inherit;
+            background: #fff;
+            color: var(--text);
+            transition: border-color 0.15s, box-shadow 0.15s;
         }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+        input:invalid:not(:placeholder-shown) {
+            border-color: var(--red);
+        }
+        textarea { resize: vertical; min-height: 70px; }
+
+        .row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+        .row-3 .field { margin-top: 10px; }
+
         .priority-box {
             background: #fff8f0;
-            padding: 12px;
-            border-radius: 15px;
-            margin: 15px 0;
-            border: 1px solid #f0c4a8;
+            border-color: #f0c4a8;
         }
+        .priority-box h2 { color: #9a3412; }
+
         .checkbox-group {
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 12px;
-            margin-top: 5px;
+            background: #f9fafb;
+            padding: 8px 10px;
+            border-radius: 10px;
+            margin-top: 6px;
         }
         .checkbox-group label {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 8px;
-            font-weight: normal;
-        }
-        .checkbox-group input {
-            width: auto;
-            margin: 0;
-        }
-        button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            width: 100%;
-            margin-top: 15px;
+            gap: 10px;
+            margin: 6px 0;
+            font-weight: 400;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: transform 0.2s;
         }
-        button:active {
-            transform: scale(0.98);
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            accent-color: var(--accent);
         }
-        button.whatsapp {
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+
+        .gps-row {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
         }
-        button.email {
-            background: linear-gradient(135deg, #2980b9 0%, #1a5276 100%);
+        .gps-row input { flex: 1; }
+        .gps-btn {
+            padding: 0 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
         }
-        .contact-info {
-            background: #e8f4fd;
-            padding: 12px;
-            border-radius: 12px;
-            margin: 15px 0;
-            font-size: 0.8rem;
-            text-align: center;
+        .gps-btn:disabled { opacity: 0.6; cursor: wait; }
+
+        #photo {
+            padding: 10px;
+            background: #f9fafb;
+            cursor: pointer;
         }
+        #photoPreview {
+            display: none;
+            max-width: 100%;
+            max-height: 220px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        #photoPreview.has-image { display: block; }
+
         .score {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            padding: 10px;
-            border-radius: 30px;
+            padding: 12px;
+            border-radius: 12px;
             text-align: center;
-            margin: 15px 0;
+            margin-top: 12px;
             font-weight: bold;
             color: white;
+            font-size: 1rem;
         }
-        .footer {
-            font-size: 0.7rem;
-            text-align: center;
-            color: #666;
-            margin-top: 15px;
-        }
-        .qr-section {
-            background: #f0f0f0;
-            padding: 15px;
-            border-radius: 15px;
-            margin-top: 20px;
-            text-align: center;
-        }
-        .qr-placeholder {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
+        .score .level {
             display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.25);
+            font-size: 0.75rem;
+            margin-left: 6px;
         }
-        @media (max-width: 600px) {
-            .form-container {
-                padding: 18px;
-                margin: 10px;
+
+        .consent-box {
+            background: #fef9c3;
+            border-color: #facc15;
+        }
+        .consent-label {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-weight: 400;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .consent-label input {
+            width: 22px;
+            height: 22px;
+            margin: 2px 0 0;
+            flex-shrink: 0;
+            accent-color: var(--primary);
+        }
+
+        .contact-info {
+            background: #e8f4fd;
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin: 14px 0;
+            font-size: 0.78rem;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .btn {
+            color: white;
+            padding: 13px 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
+            font-family: inherit;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn:disabled { opacity: 0.55; cursor: wait; }
+        .btn:focus-visible { outline: 3px solid #fbbf24; outline-offset: 2px; }
+
+        .btn-pdf      { background: linear-gradient(135deg, var(--pdf) 0%, var(--pdf-2) 100%); }
+        .btn-whatsapp { background: linear-gradient(135deg, var(--whatsapp) 0%, var(--whatsapp-2) 100%); }
+        .btn-email    { background: linear-gradient(135deg, var(--email) 0%, var(--email-2) 100%); }
+        .btn-secondary {
+            background: #fff;
+            color: var(--primary);
+            border: 1.5px solid var(--primary);
+        }
+        .btn-link {
+            background: transparent;
+            color: var(--muted);
+            text-decoration: underline;
+            padding: 8px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .status-bar {
+            font-size: 0.72rem;
+            color: var(--muted);
+            text-align: center;
+            margin: 6px 0 0;
+            min-height: 14px;
+        }
+        .status-bar.success { color: var(--green); }
+        .status-bar.error   { color: var(--red); }
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.7rem;
+            margin-top: 14px;
+        }
+
+        details.setup {
+            margin-top: 18px;
+            background: #f9fafb;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+        }
+        details.setup summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        details.setup ol { padding-left: 20px; }
+        details.setup pre {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 10px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.7rem;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        details.setup code {
+            background: #fff;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+
+        @media (max-width: 420px) {
+            .form-container { padding: 14px; border-radius: 16px; margin: 8px auto; }
+            header h1 { font-size: 1.2rem; }
+            .row-3 { grid-template-columns: 1fr; }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --card: #1e293b;
+                --text: #f1f5f9;
+                --muted: #94a3b8;
+                --border: #334155;
             }
+            input, select, textarea { background: #0f172a; color: var(--text); }
+            section { background: #1e293b; }
+            .priority-box { background: #422706; border-color: #92400e; }
+            .priority-box h2 { color: #fed7aa; }
+            .checkbox-group { background: #0f172a; }
+            .consent-box { background: #422006; border-color: #b45309; color: #fef3c7; }
+            .contact-info { background: #1e3a5f; color: #dbeafe; }
+            .btn-secondary { background: #1e293b; color: #93c5fd; border-color: #93c5fd; }
+            details.setup { background: #0f172a; }
+            #photo { background: #0f172a; }
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .form-container { box-shadow: none; max-width: 100%; margin: 0; padding: 8px; }
+            .actions, details.setup, .status-bar, footer, .gps-btn, #photo { display: none !important; }
+            section { break-inside: avoid; border-color: #999; }
+            .score { background: #f5f5f5 !important; color: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            input, select, textarea { border-color: #999; }
+            #photoPreview.has-image { max-height: 300px; }
         }
     </style>
 </head>
 <body>
-<div class="form-container">
-    <h2>🇱🇦 ສສວປ ລາວ: ແບບສຳຫຼວດໄລຍະທີ 1
-        <small>SSVP Laos: Phase 1 Survey • Hailstorm Response 2026</small>
-    </h2>
+<div class="form-container" id="formRoot">
 
-    <label>👤 ຊື່ຜູ້ສຳຫຼວດ / Interviewer</label>
-    <input type="text" id="interviewer" placeholder="ຕົວຢ່າງ: ທ. ສົມຈິດ" required>
+    <header>
+        <h1>🇱🇦 ສສວປ ລາວ — ແບບສຳຫຼວດໄລຍະທີ 1</h1>
+        <p class="subtitle">SSVP Laos: Phase 1 Survey • Hailstorm Response 2026</p>
+        <p class="meta">
+            <span><strong>ID:</strong> <span id="surveyId">—</span></span>
+            <span><strong>📅</strong> <span id="surveyDateLabel">—</span></span>
+        </p>
+    </header>
 
-    <label>🏠 ຊື່ຫົວໜ້າຄອບຄົວ / Household Head</label>
-    <input type="text" id="beneficiary" placeholder="ຊື່ ແລະ ນາມສະກຸນ" required>
+    <div class="status-bar" id="statusBar" role="status" aria-live="polite"></div>
 
-    <label>📞 ເບີໂທ / Phone Number</label>
-    <input type="tel" id="phone" placeholder="020 12345678" required>
+    <section>
+        <h2>👤 Interviewer / ຜູ້ສຳຫຼວດ</h2>
+        <div class="field">
+            <label for="interviewer">Name / ຊື່</label>
+            <input type="text" id="interviewer" placeholder="ຕົວຢ່າງ: ທ. ສົມຈິດ" required autocomplete="name">
+        </div>
+        <div class="field">
+            <label for="surveyDateInput">Survey date / ວັນທີສຳຫຼວດ</label>
+            <input type="date" id="surveyDateInput" required>
+        </div>
+    </section>
 
-    <label>📍 ບ້ານ / Village (Sikhottabong)</label>
-    <input type="text" id="village" placeholder="ຊື່ບ້ານ" required>
+    <section>
+        <h2>🏠 Household / ຄອບຄົວ</h2>
+        <div class="field">
+            <label for="beneficiary">Head of household / ຊື່ຫົວໜ້າຄອບຄົວ</label>
+            <input type="text" id="beneficiary" placeholder="ຊື່ ແລະ ນາມສະກຸນ" required>
+        </div>
+        <div class="field">
+            <label for="phone">Phone / ເບີໂທ</label>
+            <input type="tel" id="phone" placeholder="020 12345678" required
+                   pattern="^(0(20|30))[\s-]?\d{7,8}$" inputmode="tel" autocomplete="tel">
+            <small class="hint">Format: 020 XXXXXXXX or 030 XXXXXXXX</small>
+        </div>
+        <div class="row-3">
+            <div class="field">
+                <label for="hhSize">Total / ຈຳນວນຄົນ</label>
+                <input type="number" id="hhSize" min="1" max="30" inputmode="numeric" placeholder="0">
+            </div>
+            <div class="field">
+                <label for="hhChildren">&lt;5 yrs / ເດັກ</label>
+                <input type="number" id="hhChildren" min="0" max="20" inputmode="numeric" placeholder="0">
+            </div>
+            <div class="field">
+                <label for="hhElderly">65+ yrs / ສູງອາຍຸ</label>
+                <input type="number" id="hhElderly" min="0" max="20" inputmode="numeric" placeholder="0">
+            </div>
+        </div>
+    </section>
 
-    <div class="priority-box">
-        <label>🏚️ ຄວາມເສຍຫາຍຫຼັງຄາ / Roof Damage</label>
-        <select id="roofDamage">
-            <option value="0">🟢 ຕ່ຳກວ່າ 40% (Less than 40%)</option>
-            <option value="20">🟡 40% - 69% (Moderate Damage)</option>
-            <option value="40">🔴 70% ຂຶ້ນໄປ (Uninhabitable / Urgent)</option>
-        </select>
+    <section>
+        <h2>📍 Location / ສະຖານທີ່ (Sikhottabong)</h2>
+        <div class="field">
+            <label for="village">Village / ບ້ານ</label>
+            <input type="text" id="village" list="villageList" placeholder="ຊື່ບ້ານ" required autocomplete="off">
+            <datalist id="villageList">
+                <option value="Phonsavanh"></option>
+                <option value="Wattay"></option>
+                <option value="Sikhai"></option>
+                <option value="Chommani"></option>
+                <option value="Naxay"></option>
+                <option value="Nongbone"></option>
+                <option value="Phonethan"></option>
+                <option value="Phonkheng"></option>
+                <option value="Sibounheuang"></option>
+                <option value="Akat"></option>
+            </datalist>
+            <small class="hint">Type to search or enter a new village name</small>
+        </div>
+        <div class="field">
+            <label for="gps">GPS coordinates / ພິກັດ (optional)</label>
+            <div class="gps-row">
+                <input type="text" id="gps" readonly placeholder="Tap → 📍 Get GPS">
+                <button type="button" class="gps-btn" id="gpsBtn">📍 Get GPS</button>
+            </div>
+        </div>
+    </section>
 
-        <label>⚡ ຄວາມສ່ຽງໄຟຟ້າ / Electrical Risk</label>
-        <select id="electricalRisk">
-            <option value="0">🟢 ສ້ອມແປງເລັກນ້ອຍ (Minor Repairs)</option>
-            <option value="15">🟡 ນ້ຳຮົ່ວ/ປັກສຽບເສຍ (Water Ingress)</option>
-            <option value="30">🔴 ສາຍໄຟເປືອຍ/ອັນຕະລາຍ (Exposed Wires - Emergency)</option>
-        </select>
-    </div>
+    <section class="priority-box">
+        <h2>🏚️ Damage Assessment / ການປະເມີນຄວາມເສຍຫາຍ</h2>
+        <div class="field">
+            <label for="roofDamage">Roof damage / ຄວາມເສຍຫາຍຫຼັງຄາ</label>
+            <select id="roofDamage" required>
+                <option value="0">🟢 &lt; 40% (Less than 40%)</option>
+                <option value="20">🟡 40% – 69% (Moderate Damage)</option>
+                <option value="40">🔴 ≥ 70% (Uninhabitable / Urgent)</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="electricalRisk">Electrical risk / ຄວາມສ່ຽງໄຟຟ້າ</label>
+            <select id="electricalRisk" required>
+                <option value="0">🟢 Minor repairs / ສ້ອມແປງເລັກນ້ອຍ</option>
+                <option value="15">🟡 Water ingress / ນ້ຳຮົ່ວ</option>
+                <option value="30">🔴 Exposed wires / ສາຍໄຟເປືອຍ (Emergency)</option>
+            </select>
+        </div>
+        <div class="score" id="scoreDisplay">
+            📊 Damage Score: <span id="scoreValue">0</span> / 70
+            <span class="level" id="scoreLevel">LOW</span>
+        </div>
+    </section>
 
-    <label>🫂 ກຸ່ມສ່ຽງ / Vulnerabilities (ເລືອກຫຼາຍຂໍ້ໄດ້)</label>
-    <div class="checkbox-group">
-        <label><input type="checkbox" class="vuln" value="👩 ແມ່ຍິງເປັນຫົວໜ້າຄອບຄົວ"> 👩 ແມ່ຍິງເປັນຫົວໜ້າຄອບຄົວ (Female-Headed)</label>
-        <label><input type="checkbox" class="vuln" value="👴 ຜູ້ສູງອາຍຸ 65+"> 👴 ຜູ້ສູງອາຍຸ 65+ (Elderly 65+)</label>
-        <label><input type="checkbox" class="vuln" value="♿ ຄົນພິການ"> ♿ ຄົນພິການ (Persons with Disabilities)</label>
-    </div>
+    <section>
+        <h2>🫂 Vulnerabilities / ກຸ່ມສ່ຽງ</h2>
+        <small class="hint">Select all that apply / ເລືອກຫຼາຍຂໍ້ໄດ້</small>
+        <div class="checkbox-group">
+            <label><input type="checkbox" class="vuln" value="Female-headed household / ແມ່ຍິງເປັນຫົວໜ້າຄອບຄົວ"> 👩 Female-headed / ແມ່ຍິງເປັນຫົວໜ້າ</label>
+            <label><input type="checkbox" class="vuln" value="Single parent / ພໍ່ຫຼືແມ່ລ້ຽງດຽວ"> 👤 Single parent / ພໍ່ຫຼືແມ່ລ້ຽງດຽວ</label>
+            <label><input type="checkbox" class="vuln" value="Elderly 65+ / ຜູ້ສູງອາຍຸ 65+"> 👴 Elderly 65+ / ຜູ້ສູງອາຍຸ</label>
+            <label><input type="checkbox" class="vuln" value="Person with disability / ຄົນພິການ"> ♿ Person with disability / ຄົນພິການ</label>
+            <label><input type="checkbox" class="vuln" value="Pregnant woman / ແມ່ຍິງມານ"> 🤰 Pregnant woman / ແມ່ຍິງມານ</label>
+            <label><input type="checkbox" class="vuln" value="Chronic illness / ພະຍາດຊຳເຮື້ອ"> 💊 Chronic illness / ພະຍາດຊຳເຮື້ອ</label>
+            <label><input type="checkbox" class="vuln" value="Children under 5 / ເດັກນ້ອຍຕ່ຳກວ່າ 5 ປີ"> 👶 Children under 5 / ເດັກນ້ອຍ &lt;5</label>
+        </div>
+    </section>
 
-    <label>📄 ການຢັ້ງຢືນກຳມະສິດ / Ownership</label>
-    <select id="ownership">
-        <option value="ບໍ່ມີເອກະສານ">❌ ບໍ່ມີເອກະສານ (No Proof)</option>
-        <option value="ມີເອກະສານ">✅ ມີເອກະສານ (Verified)</option>
-    </select>
+    <section>
+        <h2>📄 Ownership / ການຢັ້ງຢືນກຳມະສິດ</h2>
+        <div class="field">
+            <label for="ownership">Document status / ສະຖານະເອກະສານ</label>
+            <select id="ownership" required>
+                <option value="No documents / ບໍ່ມີເອກະສານ">❌ No documents / ບໍ່ມີເອກະສານ</option>
+                <option value="Village chief attestation / ໃບຢັ້ງຢືນຈາກນາຍບ້ານ">📝 Village chief attestation / ນາຍບ້ານຢັ້ງຢືນ</option>
+                <option value="Land use certificate / ໃບໃຊ້ປະໂຫຍດທີ່ດິນ">📋 Land use certificate / ໃບໃຊ້ປະໂຫຍດທີ່ດິນ</option>
+                <option value="Full title / ໃບຕາດິນ">✅ Full title / ໃບຕາດິນ</option>
+                <option value="Rented / ເຊົ່າ">🏘️ Rented / ເຊົ່າ</option>
+            </select>
+        </div>
+    </section>
 
-    <div class="score" id="scoreDisplay">
-        📊 ຄະແນນລວມ / Total Score: <span id="scoreValue">0</span> / 70
-    </div>
+    <section>
+        <h2>💧 Living Conditions / ສະພາບຄວາມເປັນຢູ່</h2>
+        <div class="field">
+            <label for="water">Water source / ແຫຼ່ງນ້ຳ</label>
+            <select id="water">
+                <option value="">— Select / ເລືອກ —</option>
+                <option value="Piped water working / ນ້ຳປະປາໃຊ້ໄດ້">🟢 Piped water working / ນ້ຳປະປາໃຊ້ໄດ້</option>
+                <option value="Piped water damaged / ນ້ຳປະປາເສຍ">🟡 Piped water damaged / ນ້ຳປະປາເສຍ</option>
+                <option value="Well / ນ້ຳສ້າງ">💧 Well / ນ້ຳສ້າງ</option>
+                <option value="No safe water / ບໍ່ມີນ້ຳສະອາດ">🔴 No safe water / ບໍ່ມີນ້ຳສະອາດ</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="sanitation">Sanitation / ສຸຂາພິບານ</label>
+            <select id="sanitation">
+                <option value="">— Select / ເລືອກ —</option>
+                <option value="Toilet working / ຫ້ອງນ້ຳໃຊ້ໄດ້">🟢 Toilet working / ຫ້ອງນ້ຳໃຊ້ໄດ້</option>
+                <option value="Toilet damaged / ຫ້ອງນ້ຳເສຍ">🟡 Toilet damaged / ຫ້ອງນ້ຳເສຍ</option>
+                <option value="No toilet / ບໍ່ມີຫ້ອງນ້ຳ">🔴 No toilet / ບໍ່ມີຫ້ອງນ້ຳ</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="food">Food security / ຄວາມໝັ້ນຄົງດ້ານອາຫານ</label>
+            <select id="food">
+                <option value="">— Select / ເລືອກ —</option>
+                <option value="Sufficient / ພຽງພໍ">🟢 Sufficient / ພຽງພໍ</option>
+                <option value="Limited 1–2 weeks / ຈຳກັດ 1-2 ອາທິດ">🟡 Limited 1–2 weeks</option>
+                <option value="Critical <1 week / ວິກິດ <1 ອາທິດ">🔴 Critical &lt;1 week</option>
+            </select>
+        </div>
+    </section>
+
+    <section>
+        <h2>📷 Photo / ຮູບພາບ <small style="font-weight:400;color:var(--muted);">(optional)</small></h2>
+        <input type="file" id="photo" accept="image/*" capture="environment">
+        <img id="photoPreview" alt="Damage photo preview">
+    </section>
+
+    <section>
+        <h2>📝 Notes / ໝາຍເຫດເພີ່ມເຕີມ</h2>
+        <textarea id="notes" rows="3" placeholder="Additional information / ຂໍ້ມູນເພີ່ມເຕີມ..."></textarea>
+    </section>
+
+    <section class="consent-box">
+        <label class="consent-label">
+            <input type="checkbox" id="consent" required>
+            <span><strong>Consent / ຢືນຢັນການຍິນຍອມ:</strong> The household head consents to this data being shared with SSVP Laos for hailstorm response coordination. / ຫົວໜ້າຄອບຄົວຍິນຍອມໃຫ້ແບ່ງປັນຂໍ້ມູນກັບ ສສວປ ລາວ.</span>
+        </label>
+    </section>
 
     <div class="contact-info">
-        <strong>📧 ສົ່ງອີເມວຫາ:</strong> chantavong.khamsone@gmail.com<br>
+        <strong>📧 Send to:</strong> chantavong.khamsone@gmail.com<br>
         <strong>📧 CC:</strong> hienphimmachanh@yahoo.com<br>
-        <strong>💚 ສົ່ງ WhatsApp ຫາ:</strong> Coordinator Kham (+856 20 5651 7254)
+        <strong>💚 WhatsApp:</strong> Coordinator Kham (+856 20 5651 7254)
     </div>
 
-    <button class="whatsapp" onclick="openWhatsApp()">💚 ເປີດ WhatsApp ອັດຕະໂນມັດ</button>
-    <button class="email" onclick="openEmail()">📧 ເປີດອີເມວອັດຕະໂນມັດ</button>
-    
-    <div class="qr-section">
-        <h3>📱 Scan QR Code to Open This Form</h3>
-        <div class="qr-placeholder" id="qrCode">
-            <p style="color:#666; padding:20px;">👇 Follow instructions below to generate QR code 👇</p>
-        </div>
-        <p style="font-size:12px; margin-top:10px;">
-            After uploading this file online, generate a QR code using any QR generator website.
-        </p>
+    <div class="actions">
+        <button type="button" class="btn btn-pdf" id="pdfBtn">📄 Download PDF / ດາວໂຫຼດ PDF</button>
+        <button type="button" class="btn btn-whatsapp" id="whatsappBtn">💚 Send via WhatsApp / ສົ່ງ WhatsApp</button>
+        <button type="button" class="btn btn-email" id="emailBtn">📧 Send via Email / ສົ່ງອີເມວ</button>
+        <button type="button" class="btn btn-secondary" id="newBtn">🔄 New Survey / ສຳຫຼວດໃໝ່</button>
+        <button type="button" class="btn btn-link" id="blankPdfBtn">📋 Download Blank PDF Template (for printing)</button>
     </div>
-    
-    <div class="footer">
-        <p>✨ Click buttons above to automatically open WhatsApp or Email with pre-filled data</p>
-        <p>✨ ກົດປຸ່ມເພື່ອເປີດ WhatsApp ຫຼື Email ອັດຕະໂນມັດ</p>
-    </div>
+
+    <footer>
+        <p>v2.0 • SSVP Laos Emergency Response Team</p>
+        <p style="margin-top:4px;">Tip: Tap 📄 PDF first, then attach the saved file in WhatsApp/Email.</p>
+    </footer>
+
+    <details class="setup">
+        <summary>⚙️ Admin: Google Sheets backup setup (one-time, ~5 min)</summary>
+        <p>This silently saves every submission to a Google Sheet — guaranteed backup even if WhatsApp/Email fails.</p>
+        <ol>
+            <li>Open <a href="https://sheets.new" target="_blank" rel="noopener">sheets.new</a> to create a fresh sheet.</li>
+            <li>Menu: <strong>Extensions → Apps Script</strong>.</li>
+            <li>Delete any existing code, paste the script below, click <strong>💾 Save</strong>.</li>
+            <li>Click <strong>Deploy → New deployment → ⚙️ → Web app</strong>.</li>
+            <li>Settings: <em>Execute as: Me</em> · <em>Who has access: Anyone</em>. Click <strong>Deploy</strong> and authorize.</li>
+            <li>Copy the <strong>Web App URL</strong> (looks like <code>https://script.google.com/macros/s/.../exec</code>).</li>
+            <li>In <code>index.html</code> find <code>const SHEETS_WEBAPP_URL = "";</code> and paste the URL between the quotes.</li>
+            <li>Commit &amp; push to GitHub. Done — every submission auto-backups.</li>
+        </ol>
+        <strong>Apps Script code to paste:</strong>
+        <pre id="appsScriptCode">function doPost(e) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  try {
+    const d = JSON.parse(e.postData.contents);
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow([
+        'Received','Survey ID','Survey Date','Interviewer','Beneficiary',
+        'Phone','Village','GPS','HH Size','Children<5','Elderly 65+',
+        'Roof Damage','Electrical Risk','Damage Score','Vulnerabilities',
+        'Ownership','Water','Sanitation','Food Security','Notes','Consent'
+      ]);
+    }
+    sheet.appendRow([
+      new Date(), d.surveyId, d.date, d.interviewer, d.beneficiary,
+      d.phone, d.village, d.gps, d.hhSize, d.hhChildren, d.hhElderly,
+      d.roofText, d.elecText, d.score, d.vuln,
+      d.ownership, d.water, d.sanitation, d.food, d.notes, d.consent ? 'Yes' : 'No'
+    ]);
+    return ContentService.createTextOutput(JSON.stringify({ok:true}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ok:false,err:String(err)}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}</pre>
+    </details>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+
 <script>
-    function updateScore() {
-        let roof = parseInt(document.getElementById('roofDamage').value) || 0;
-        let elec = parseInt(document.getElementById('electricalRisk').value) || 0;
-        document.getElementById('scoreValue').innerText = roof + elec;
-    }
-    document.getElementById('roofDamage').addEventListener('change', updateScore);
-    document.getElementById('electricalRisk').addEventListener('change', updateScore);
-    updateScore();
+(function () {
+    'use strict';
 
-    function getVulnerabilities() {
-        let checks = document.querySelectorAll('.vuln:checked');
-        let values = [];
-        checks.forEach(cb => values.push(cb.value));
-        return values.length > 0 ? values.join(', ') : 'ບໍ່ມີ (None)';
+    // ===== CONFIG =====
+    // Paste your Google Apps Script Web App URL here to enable silent backup.
+    // Leave as "" to disable. See the Admin section at bottom of the page.
+    const SHEETS_WEBAPP_URL = "";
+
+    const COORDINATOR_WHATSAPP = "8562056517254"; // wa.me format, no '+'
+    const TO_EMAIL  = "chantavong.khamsone@gmail.com";
+    const CC_EMAIL  = "hienphimmachanh@yahoo.com";
+
+    const STORAGE_KEY = 'ssvp_phase1_draft_v2';
+    const COUNTER_KEY = 'ssvp_phase1_counter';
+    const ID_DATE_KEY = 'ssvp_phase1_id_date';
+
+    // ===== HELPERS =====
+    const $ = (id) => document.getElementById(id);
+    const setStatus = (msg, type) => {
+        const bar = $('statusBar');
+        bar.textContent = msg || '';
+        bar.className = 'status-bar' + (type ? ' ' + type : '');
+    };
+    const todayISO = () => {
+        const d = new Date();
+        const tz = d.getTimezoneOffset() * 60000;
+        return new Date(d - tz).toISOString().slice(0, 10);
+    };
+    const formatHumanDate = (iso) => {
+        if (!iso) return '—';
+        const [y, m, d] = iso.split('-');
+        return `${d}/${m}/${y}`;
+    };
+
+    // ===== SURVEY ID =====
+    function generateSurveyId() {
+        const today = todayISO().replace(/-/g, '');
+        const lastDate = localStorage.getItem(ID_DATE_KEY);
+        let counter = parseInt(localStorage.getItem(COUNTER_KEY) || '0', 10);
+        if (lastDate !== today) counter = 0;
+        counter += 1;
+        localStorage.setItem(COUNTER_KEY, String(counter));
+        localStorage.setItem(ID_DATE_KEY, today);
+        return `SSVP-${today}-${String(counter).padStart(4, '0')}`;
     }
 
-    function getFormData() {
-        let interviewer = document.getElementById('interviewer').value.trim();
-        let beneficiary = document.getElementById('beneficiary').value.trim();
-        let phone = document.getElementById('phone').value.trim();
-        let village = document.getElementById('village').value.trim();
-        
-        if(!interviewer || !beneficiary || !phone || !village) {
-            alert("⚠️ ກະລຸນາຕື່ມຂໍ້ມູນໃຫ້ຄົບກ່ອນ!\n\nPlease fill all required fields!");
+    // ===== STATE / FORM HELPERS =====
+    const FIELD_IDS = [
+        'interviewer', 'surveyDateInput', 'beneficiary', 'phone',
+        'hhSize', 'hhChildren', 'hhElderly',
+        'village', 'gps',
+        'roofDamage', 'electricalRisk',
+        'ownership', 'water', 'sanitation', 'food',
+        'notes'
+    ];
+
+    function collectFormData() {
+        const interviewer = $('interviewer').value.trim();
+        const beneficiary = $('beneficiary').value.trim();
+        const phone       = $('phone').value.trim();
+        const village     = $('village').value.trim();
+        const date        = $('surveyDateInput').value || todayISO();
+        const consent     = $('consent').checked;
+
+        const missing = [];
+        if (!interviewer) missing.push('Interviewer');
+        if (!beneficiary) missing.push('Household head');
+        if (!phone)       missing.push('Phone');
+        if (!village)     missing.push('Village');
+        if (!consent)     missing.push('Consent checkbox');
+
+        if (missing.length) {
+            alert('⚠️ Please complete:\n• ' + missing.join('\n• ') +
+                  '\n\nກະລຸນາຕື່ມຂໍ້ມູນທີ່ຍັງຂາດ.');
             return null;
         }
-        
-        let roofText = document.getElementById('roofDamage').options[document.getElementById('roofDamage').selectedIndex].text;
-        let elecText = document.getElementById('electricalRisk').options[document.getElementById('electricalRisk').selectedIndex].text;
-        let roofVal = parseInt(document.getElementById('roofDamage').value);
-        let elecVal = parseInt(document.getElementById('electricalRisk').value);
-        let score = roofVal + elecVal;
-        let ownership = document.getElementById('ownership').value;
-        let vuln = getVulnerabilities();
-        
-        return { interviewer, beneficiary, phone, village, roofText, elecText, score, ownership, vuln };
+
+        const phonePattern = /^(0(20|30))[\s-]?\d{7,8}$/;
+        if (!phonePattern.test(phone)) {
+            const ok = confirm('⚠️ Phone format looks unusual: "' + phone +
+                  '"\n\nExpected: 020 XXXXXXXX or 030 XXXXXXXX.\n\nContinue anyway?');
+            if (!ok) return null;
+        }
+
+        const roofSel = $('roofDamage');
+        const elecSel = $('electricalRisk');
+        const roofText = roofSel.options[roofSel.selectedIndex].text;
+        const elecText = elecSel.options[elecSel.selectedIndex].text;
+        const score = (parseInt(roofSel.value, 10) || 0) + (parseInt(elecSel.value, 10) || 0);
+
+        const vuln = Array.from(document.querySelectorAll('.vuln:checked'))
+            .map(cb => cb.value);
+
+        return {
+            surveyId:   $('surveyId').textContent,
+            date:       date,
+            interviewer, beneficiary, phone, village,
+            gps:        $('gps').value || 'Not captured',
+            hhSize:     $('hhSize').value || '',
+            hhChildren: $('hhChildren').value || '',
+            hhElderly:  $('hhElderly').value || '',
+            roofText, elecText, score,
+            vuln:       vuln.length ? vuln.join(', ') : 'None',
+            ownership:  $('ownership').value,
+            water:      $('water').value || 'Not specified',
+            sanitation: $('sanitation').value || 'Not specified',
+            food:       $('food').value || 'Not specified',
+            notes:      $('notes').value.trim(),
+            consent
+        };
     }
 
-    function openWhatsApp() {
-        let data = getFormData();
-        if(!data) return;
-        
-        let message = `📋 SSVP LAOS SURVEY - PHASE 1%0A─────────────────────%0A👤 ຜູ້ສຳຫຼວດ: ${data.interviewer}%0A🏠 ຫົວໜ້າຄອບຄົວ: ${data.beneficiary}%0A📞 ເບີໂທ: ${data.phone}%0A📍 ບ້ານ: ${data.village}%0A🏚️ ຫຼັງຄາ: ${data.roofText}%0A⚡ ໄຟຟ້າ: ${data.elecText}%0A📊 ຄະແນນ: ${data.score}/70%0A🫂 ກຸ່ມສ່ຽງ: ${data.vuln}%0A📄 ກຳມະສິດ: ${data.ownership}%0A─────────────────────%0Aກະລຸນາຊ່ວຍເຫຼືອຄອບຄົວນີ້. Please assist this family.`;
-        
-        let khamNumber = "8562056517254";
-        window.open(`https://wa.me/${khamNumber}?text=${message}`, '_blank');
+    // ===== SCORE =====
+    function updateScore() {
+        const roof = parseInt($('roofDamage').value, 10) || 0;
+        const elec = parseInt($('electricalRisk').value, 10) || 0;
+        const total = roof + elec;
+        $('scoreValue').textContent = total;
+        const lvl = $('scoreLevel');
+        if (total >= 50)      { lvl.textContent = 'URGENT'; lvl.style.background = 'rgba(0,0,0,0.4)'; }
+        else if (total >= 25) { lvl.textContent = 'MODERATE'; lvl.style.background = 'rgba(255,255,255,0.25)'; }
+        else                  { lvl.textContent = 'LOW'; lvl.style.background = 'rgba(255,255,255,0.2)'; }
     }
 
-    function openEmail() {
-        let data = getFormData();
-        if(!data) return;
-        
-        let toEmail = "chantavong.khamsone@gmail.com";
-        let ccEmail = "hienphimmachanh@yahoo.com";
-        let subject = `SSVP Survey - ${data.beneficiary} - ${data.village} - Score ${data.score}`;
-        let body = `ສສວປ ລາວ: ແບບສຳຫຼວດໄລຍະທີ 1%0A%0Aຜູ້ສຳຫຼວດ: ${data.interviewer}%0Aຫົວໜ້າຄອບຄົວ: ${data.beneficiary}%0Aເບີໂທ: ${data.phone}%0Aບ້ານ: ${data.village}%0Aຄວາມເສຍຫາຍຫຼັງຄາ: ${data.roofText}%0Aຄວາມສ່ຽງໄຟຟ້າ: ${data.elecText}%0Aຄະແນນບູລິມະສິດ: ${data.score}/70%0Aກຸ່ມສ່ຽງ: ${data.vuln}%0Aກຳມະສິດ: ${data.ownership}%0A%0A--- SSVP Laos Emergency Response Team ---`;
-        
-        window.location.href = `mailto:${toEmail}?cc=${ccEmail}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    // ===== AUTO-SAVE / RESTORE =====
+    let saveTimer;
+    function autoSave() {
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+            const draft = { id: $('surveyId').textContent };
+            FIELD_IDS.forEach(id => { draft[id] = $(id).value; });
+            draft.vuln = Array.from(document.querySelectorAll('.vuln:checked')).map(cb => cb.value);
+            draft.consent = $('consent').checked;
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+                setStatus('💾 Draft saved at ' + new Date().toLocaleTimeString(), 'success');
+            } catch (e) {
+                setStatus('⚠️ Could not save draft', 'error');
+            }
+        }, 500);
     }
+
+    function restoreDraft() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return false;
+            const draft = JSON.parse(raw);
+            if (!confirm('📂 Restore unsent draft for ' + (draft.id || 'previous survey') +
+                         '?\n\n(Cancel = start fresh)')) {
+                localStorage.removeItem(STORAGE_KEY);
+                return false;
+            }
+            FIELD_IDS.forEach(id => {
+                if (draft[id] !== undefined) $(id).value = draft[id];
+            });
+            if (Array.isArray(draft.vuln)) {
+                document.querySelectorAll('.vuln').forEach(cb => {
+                    cb.checked = draft.vuln.includes(cb.value);
+                });
+            }
+            $('consent').checked = !!draft.consent;
+            if (draft.id) $('surveyId').textContent = draft.id;
+            updateScore();
+            setStatus('📂 Draft restored', 'success');
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function newSurvey() {
+        if (!confirm('🔄 Start a new survey?\n\nThis clears the current form (saved draft is also removed).')) return;
+        localStorage.removeItem(STORAGE_KEY);
+        document.querySelectorAll('input[type="text"], input[type="tel"], input[type="number"], textarea').forEach(el => el.value = '');
+        document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+        document.querySelectorAll('.vuln').forEach(cb => cb.checked = false);
+        $('consent').checked = false;
+        $('photoPreview').src = '';
+        $('photoPreview').classList.remove('has-image');
+        $('photo').value = '';
+        $('gps').value = '';
+        $('surveyDateInput').value = todayISO();
+        $('surveyId').textContent = generateSurveyId();
+        $('surveyDateLabel').textContent = formatHumanDate(todayISO());
+        updateScore();
+        setStatus('✨ New survey started', 'success');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ===== GPS =====
+    function captureGPS() {
+        if (!navigator.geolocation) {
+            alert('GPS not supported by this browser.');
+            return;
+        }
+        const btn = $('gpsBtn');
+        btn.disabled = true;
+        btn.textContent = '⌛ Getting…';
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const lat = pos.coords.latitude.toFixed(6);
+                const lon = pos.coords.longitude.toFixed(6);
+                $('gps').value = `${lat}, ${lon}`;
+                btn.disabled = false;
+                btn.textContent = '✅ Update GPS';
+                autoSave();
+            },
+            (err) => {
+                btn.disabled = false;
+                btn.textContent = '📍 Get GPS';
+                alert('GPS failed: ' + err.message + '\n\nMake sure location permission is granted.');
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
+    }
+
+    // ===== PHOTO =====
+    function handlePhoto(e) {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            const img = $('photoPreview');
+            img.src = evt.target.result;
+            img.classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // ===== MESSAGE BUILDERS =====
+    function buildPlainMessage(d) {
+        return [
+            '📋 SSVP LAOS — PHASE 1 SURVEY',
+            '─────────────────────',
+            '🆔 ID: ' + d.surveyId,
+            '📅 Date: ' + formatHumanDate(d.date),
+            '👤 Interviewer: ' + d.interviewer,
+            '🏠 Household head: ' + d.beneficiary,
+            '📞 Phone: ' + d.phone,
+            '📍 Village: ' + d.village,
+            '🗺️ GPS: ' + d.gps,
+            '👨‍👩‍👧 Household: ' + (d.hhSize || '?') + ' (children<5: ' + (d.hhChildren || '0') + ', elderly: ' + (d.hhElderly || '0') + ')',
+            '─────────────────────',
+            '🏚️ Roof: ' + d.roofText,
+            '⚡ Electrical: ' + d.elecText,
+            '📊 Damage score: ' + d.score + ' / 70',
+            '🫂 Vulnerabilities: ' + d.vuln,
+            '📄 Ownership: ' + d.ownership,
+            '💧 Water: ' + d.water,
+            '🚽 Sanitation: ' + d.sanitation,
+            '🍚 Food: ' + d.food,
+            '─────────────────────',
+            d.notes ? '📝 Notes: ' + d.notes : '',
+            '',
+            '📎 PDF attached separately.',
+            '— SSVP Laos Emergency Response —'
+        ].filter(Boolean).join('\n');
+    }
+
+    // ===== WHATSAPP =====
+    function sendWhatsApp() {
+        const data = collectFormData();
+        if (!data) return;
+        backupToSheets(data);
+        const msg = encodeURIComponent(buildPlainMessage(data));
+        const url = `https://wa.me/${COORDINATOR_WHATSAPP}?text=${msg}`;
+        window.open(url, '_blank');
+        setStatus('💚 Opening WhatsApp… remember to attach the PDF.', 'success');
+    }
+
+    // ===== EMAIL =====
+    function sendEmail() {
+        const data = collectFormData();
+        if (!data) return;
+        backupToSheets(data);
+        const subject = `SSVP Survey ${data.surveyId} — ${data.beneficiary} — ${data.village} — Score ${data.score}`;
+        const body = buildPlainMessage(data);
+        const url = `mailto:${TO_EMAIL}?cc=${encodeURIComponent(CC_EMAIL)}` +
+                    `&subject=${encodeURIComponent(subject)}` +
+                    `&body=${encodeURIComponent(body)}`;
+        window.location.href = url;
+        setStatus('📧 Opening email… remember to attach the PDF.', 'success');
+    }
+
+    // ===== PDF =====
+    function downloadPDF() {
+        const data = collectFormData();
+        if (!data) return;
+
+        if (typeof html2pdf === 'undefined') {
+            alert('PDF library not loaded yet. Falling back to browser Print → "Save as PDF".');
+            window.print();
+            return;
+        }
+
+        const btn = $('pdfBtn');
+        btn.disabled = true;
+        btn.textContent = '⌛ Generating PDF…';
+        setStatus('⌛ Generating PDF…');
+
+        const root = $('formRoot');
+        html2pdf().from(root).set({
+            margin: [8, 8, 8, 8],
+            filename: `SSVP-${data.surveyId}-${data.beneficiary.replace(/\s+/g, '_')}.pdf`,
+            image:    { type: 'jpeg', quality: 0.92 },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+            jsPDF:    { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        }).save().then(() => {
+            backupToSheets(data);
+            btn.disabled = false;
+            btn.textContent = '📄 Download PDF / ດາວໂຫຼດ PDF';
+            setStatus('✅ PDF saved. Now tap WhatsApp or Email and attach it.', 'success');
+        }).catch(err => {
+            btn.disabled = false;
+            btn.textContent = '📄 Download PDF / ດາວໂຫຼດ PDF';
+            setStatus('⚠️ PDF failed: ' + err.message + ' — using browser print instead.', 'error');
+            window.print();
+        });
+    }
+
+    // ===== BLANK PDF TEMPLATE =====
+    function downloadBlankPDF() {
+        if (typeof html2pdf === 'undefined') {
+            alert('PDF library not loaded yet. Please try again in a moment.');
+            return;
+        }
+        if (!confirm('📋 Generate a BLANK printable template?\n\nThis temporarily clears the form, exports the PDF, then restores your data.')) return;
+
+        // Snapshot current state
+        const snapshot = {};
+        FIELD_IDS.forEach(id => snapshot[id] = $(id).value);
+        snapshot.vuln = Array.from(document.querySelectorAll('.vuln:checked')).map(cb => cb.value);
+        snapshot.consent = $('consent').checked;
+        snapshot.photoSrc = $('photoPreview').src;
+        snapshot.photoVisible = $('photoPreview').classList.contains('has-image');
+        const snapshotId = $('surveyId').textContent;
+
+        // Clear
+        FIELD_IDS.forEach(id => {
+            const el = $(id);
+            if (el.tagName === 'SELECT') el.selectedIndex = 0;
+            else el.value = '';
+        });
+        document.querySelectorAll('.vuln').forEach(cb => cb.checked = false);
+        $('consent').checked = false;
+        $('photoPreview').src = '';
+        $('photoPreview').classList.remove('has-image');
+        $('surveyId').textContent = '________________';
+        $('surveyDateInput').value = '';
+        $('surveyDateLabel').textContent = '____ / ____ / ________';
+        updateScore();
+
+        const btn = $('blankPdfBtn');
+        btn.disabled = true;
+        btn.textContent = '⌛ Generating blank template…';
+
+        const restore = () => {
+            FIELD_IDS.forEach(id => $(id).value = snapshot[id] || '');
+            document.querySelectorAll('.vuln').forEach(cb => {
+                cb.checked = snapshot.vuln.includes(cb.value);
+            });
+            $('consent').checked = snapshot.consent;
+            if (snapshot.photoVisible) {
+                $('photoPreview').src = snapshot.photoSrc;
+                $('photoPreview').classList.add('has-image');
+            }
+            $('surveyId').textContent = snapshotId;
+            $('surveyDateLabel').textContent = formatHumanDate(snapshot.surveyDateInput || todayISO());
+            updateScore();
+            btn.disabled = false;
+            btn.textContent = '📋 Download Blank PDF Template (for printing)';
+        };
+
+        html2pdf().from($('formRoot')).set({
+            margin: [8, 8, 8, 8],
+            filename: 'SSVP-Phase1-Survey-Blank.pdf',
+            image: { type: 'jpeg', quality: 0.92 },
+            html2canvas: { scale: 2, backgroundColor: '#ffffff' },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        }).save().then(() => {
+            restore();
+            setStatus('✅ Blank template downloaded — print it for paper backup.', 'success');
+        }).catch(err => {
+            restore();
+            setStatus('⚠️ Blank PDF failed: ' + err.message, 'error');
+        });
+    }
+
+    // ===== GOOGLE SHEETS BACKUP (silent) =====
+    function backupToSheets(data) {
+        if (!SHEETS_WEBAPP_URL) return;
+        try {
+            fetch(SHEETS_WEBAPP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(data)
+            }).catch(() => { /* silent */ });
+        } catch (e) { /* silent */ }
+    }
+
+    // ===== INIT =====
+    function init() {
+        $('surveyDateInput').value = todayISO();
+        $('surveyDateLabel').textContent = formatHumanDate(todayISO());
+        $('surveyId').textContent = generateSurveyId();
+
+        $('roofDamage').addEventListener('change', () => { updateScore(); autoSave(); });
+        $('electricalRisk').addEventListener('change', () => { updateScore(); autoSave(); });
+
+        FIELD_IDS.forEach(id => $(id).addEventListener('input', autoSave));
+        document.querySelectorAll('.vuln').forEach(cb => cb.addEventListener('change', autoSave));
+        $('consent').addEventListener('change', autoSave);
+        $('surveyDateInput').addEventListener('change', () => {
+            $('surveyDateLabel').textContent = formatHumanDate($('surveyDateInput').value);
+            autoSave();
+        });
+
+        $('gpsBtn').addEventListener('click', captureGPS);
+        $('photo').addEventListener('change', handlePhoto);
+
+        $('pdfBtn').addEventListener('click', downloadPDF);
+        $('whatsappBtn').addEventListener('click', sendWhatsApp);
+        $('emailBtn').addEventListener('click', sendEmail);
+        $('newBtn').addEventListener('click', newSurvey);
+        $('blankPdfBtn').addEventListener('click', downloadBlankPDF);
+
+        updateScore();
+
+        if (localStorage.getItem(STORAGE_KEY)) {
+            // Run after a tick so user sees the page first
+            setTimeout(restoreDraft, 200);
+        } else {
+            setStatus('Ready to record a new survey.');
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
 </script>
 </body>
 </html>
