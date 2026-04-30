@@ -381,8 +381,18 @@
         }
 
         /* ===== ONE-PAGE A4 PDF TEMPLATE ===== */
+        /* Wrapper hides the template off-screen but keeps it in normal layout
+           flow so html2canvas can render it reliably. */
+        #pdfTemplateWrap {
+            position: absolute;
+            left: -10000px;
+            top: 0;
+            width: 210mm;
+            pointer-events: none;
+            opacity: 1;
+            z-index: -1;
+        }
         #pdfTemplate {
-            display: none;
             width: 210mm;
             min-height: 297mm;
             padding: 10mm 12mm;
@@ -392,13 +402,6 @@
             font-size: 9pt;
             line-height: 1.35;
             box-sizing: border-box;
-        }
-        #pdfTemplate.rendering {
-            display: block;
-            position: fixed;
-            top: 0;
-            left: -10000px;
-            z-index: -1;
         }
         .pdf-header {
             display: flex;
@@ -802,7 +805,8 @@
 </div>
 
 <!-- ===== HIDDEN ONE-PAGE PDF TEMPLATE (filled at export time) ===== -->
-<div id="pdfTemplate" aria-hidden="true">
+<div id="pdfTemplateWrap" aria-hidden="true">
+<div id="pdfTemplate">
     <div class="pdf-header">
         <div class="pdf-title">
             <div class="logo">SSVP LAOS — Phase 1 Survey</div>
@@ -847,7 +851,8 @@
 
     <div class="pdf-section-title">Photo / ຮູບພາບ</div>
     <div class="pdf-photo-block" id="pdfPhotoBlock">
-        <img id="pdfPhoto" src="" alt="">
+        <img id="pdfPhoto" src="" alt="" style="display:none">
+        <span id="pdfPhotoPlaceholder">No photo provided</span>
     </div>
 
     <div class="pdf-section-title">Notes / ໝາຍເຫດ</div>
@@ -866,6 +871,7 @@
     <div class="pdf-footer">
         SSVP Laos Emergency Response Team · chantavong.khamsone@gmail.com · WhatsApp +856 20 5651 7254
     </div>
+</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
@@ -1211,6 +1217,7 @@
 
         const photoBlock = $('pdfPhotoBlock');
         const photoImg = $('pdfPhoto');
+        const photoPh  = $('pdfPhotoPlaceholder');
         const previewSrc = $('photoPreview').src;
         const hasPhoto = !blank && $('photoPreview').classList.contains('has-image') && previewSrc;
         if (hasPhoto) {
@@ -1220,10 +1227,11 @@
         } else {
             photoImg.removeAttribute('src');
             photoImg.style.display = 'none';
+            photoPh.style.display = 'inline-block';
+            photoPh.textContent = blank
+                ? '[ Attach photo of damage here ]'
+                : 'No photo provided';
             photoBlock.classList.add('empty');
-            photoBlock.innerHTML = blank
-                ? '<span>[ Attach photo of damage here ]</span>'
-                : '<span>No photo provided</span>';
         }
 
         const notesEl = $('pdfNotes');
@@ -1243,7 +1251,8 @@
 
     function renderPdf(filename) {
         const tpl = $('pdfTemplate');
-        tpl.classList.add('rendering');
+        // Force reflow so html2canvas sees correct dimensions
+        void tpl.offsetHeight;
 
         const opts = {
             margin: 0,
@@ -1253,15 +1262,15 @@
                 scale: 2,
                 useCORS: true,
                 backgroundColor: '#ffffff',
-                windowWidth: tpl.scrollWidth
+                width: tpl.offsetWidth,
+                height: tpl.offsetHeight,
+                windowWidth: tpl.offsetWidth
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
             pagebreak: { mode: ['avoid-all'] }
         };
 
-        return html2pdf().from(tpl).set(opts).save().finally(() => {
-            tpl.classList.remove('rendering');
-        });
+        return html2pdf().from(tpl).set(opts).save();
     }
 
     // ===== PDF (filled survey, one page) =====
