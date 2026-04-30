@@ -381,16 +381,20 @@
         }
 
         /* ===== ONE-PAGE A4 PDF TEMPLATE ===== */
-        /* Wrapper hides the template off-screen but keeps it in normal layout
-           flow so html2canvas can render it reliably. */
+        /* Hidden by default. During render, an overlay covers the screen so
+           the user only sees the spinner while the template is briefly shown
+           inside the viewport (required for html2canvas to capture it). */
         #pdfTemplateWrap {
-            position: absolute;
-            left: -10000px;
+            display: none;
+        }
+        #pdfTemplateWrap.rendering {
+            display: block;
+            position: fixed;
             top: 0;
+            left: 0;
             width: 210mm;
-            pointer-events: none;
-            opacity: 1;
-            z-index: -1;
+            z-index: 1;
+            background: white;
         }
         #pdfTemplate {
             width: 210mm;
@@ -403,6 +407,32 @@
             line-height: 1.35;
             box-sizing: border-box;
         }
+        #pdfOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            gap: 14px;
+            text-align: center;
+            padding: 20px;
+        }
+        #pdfOverlay.active { display: flex; }
+        #pdfOverlay .spinner {
+            width: 44px;
+            height: 44px;
+            border: 4px solid rgba(255,255,255,0.25);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: pdf-spin 0.9s linear infinite;
+        }
+        @keyframes pdf-spin { to { transform: rotate(360deg); } }
         .pdf-header {
             display: flex;
             justify-content: space-between;
@@ -802,6 +832,15 @@
   }
 }</pre>
     </details>
+</div>
+
+<!-- ===== PDF GENERATION OVERLAY ===== -->
+<div id="pdfOverlay" aria-hidden="true">
+    <div class="spinner"></div>
+    <div id="pdfOverlayMsg">📄 Generating PDF…</div>
+    <div style="font-size: 0.85rem; opacity: 0.8; font-weight: 400;">
+        Please wait, do not close this page.
+    </div>
 </div>
 
 <!-- ===== HIDDEN ONE-PAGE PDF TEMPLATE (filled at export time) ===== -->
@@ -1249,28 +1288,48 @@
         $('pdfConsentBox').textContent = (blank || !d.consent) ? '☐' : '✓';
     }
 
-    function renderPdf(filename) {
+    function renderPdf(filename, msg) {
         const tpl = $('pdfTemplate');
-        // Force reflow so html2canvas sees correct dimensions
-        void tpl.offsetHeight;
+        const wrap = $('pdfTemplateWrap');
+        const overlay = $('pdfOverlay');
+        const overlayMsg = $('pdfOverlayMsg');
 
-        const opts = {
-            margin: 0,
-            filename: filename,
-            image: { type: 'jpeg', quality: 0.95 },
-            html2canvas: {
-                scale: 2,
-                useCORS: true,
-                backgroundColor: '#ffffff',
-                width: tpl.offsetWidth,
-                height: tpl.offsetHeight,
-                windowWidth: tpl.offsetWidth
-            },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
-            pagebreak: { mode: ['avoid-all'] }
+        if (msg) overlayMsg.textContent = msg;
+        overlay.classList.add('active');
+        wrap.classList.add('rendering');
+
+        const cleanup = () => {
+            wrap.classList.remove('rendering');
+            overlay.classList.remove('active');
         };
 
-        return html2pdf().from(tpl).set(opts).save();
+        // Wait two animation frames so the browser actually paints the
+        // template before html2canvas measures and renders it.
+        return new Promise((resolve, reject) => {
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    void tpl.offsetHeight; // force layout
+
+                    const opts = {
+                        margin: 0,
+                        filename: filename,
+                        image: { type: 'jpeg', quality: 0.95 },
+                        html2canvas: {
+                            scale: 2,
+                            useCORS: true,
+                            backgroundColor: '#ffffff',
+                            logging: false
+                        },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+                        pagebreak: { mode: ['avoid-all'] }
+                    };
+
+                    html2pdf().from(tpl).set(opts).save()
+                        .then(() => { cleanup(); resolve(); })
+                        .catch(err => { cleanup(); reject(err); });
+                });
+            });
+        });
     }
 
     // ===== PDF (filled survey, one page) =====
@@ -1294,7 +1353,7 @@
         const safeName = (data.beneficiary || 'survey').replace(/[^\p{L}\p{N}_-]+/gu, '_').slice(0, 40);
         const filename = `SSVP-${data.surveyId}-${safeName}.pdf`;
 
-        renderPdf(filename).then(() => {
+        renderPdf(filename, '📄 Generating survey PDF…').then(() => {
             backupToSheets(data);
             btn.disabled = false;
             btn.textContent = '📄 Download PDF / ດາວໂຫຼດ PDF';
@@ -1321,7 +1380,7 @@
 
         fillPdfTemplate({}, { blank: true });
 
-        renderPdf('SSVP-Phase1-Survey-Blank.pdf').then(() => {
+        renderPdf('SSVP-Phase1-Survey-Blank.pdf', '📋 Generating blank template…').then(() => {
             btn.disabled = false;
             btn.textContent = '📋 Download Blank PDF Template (for printing)';
             setStatus('✅ Blank template downloaded — print it for paper backup.', 'success');
