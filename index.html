@@ -812,19 +812,17 @@
             </select>
         </div>
         <div class="field">
+            <label for="damagedArea">Damage roof in m² / ຄວາມເສຍຫາຍຫຼັງຄາ ຕາຣາງແມັດ</label>
+            <input type="number" id="damagedArea" min="0" step="1" inputmode="numeric" placeholder="e.g. 45">
+            <small class="hint">Square meters of damaged roof / ຕາຣາງແມັດທີ່ເສຍຫາຍ</small>
+        </div>
+        <div class="field">
             <label for="electricalRisk">Electrical risk / ຄວາມສ່ຽງໄຟຟ້າ</label>
             <select id="electricalRisk" required>
                 <option value="0">🟢 Minor repairs / ສ້ອມແປງເລັກນ້ອຍ</option>
                 <option value="15">🟡 Water ingress / ນ້ຳຮົ່ວ</option>
                 <option value="30">🔴 Exposed wires / ສາຍໄຟເປືອຍ (Emergency)</option>
             </select>
-        </div>
-        <div class="field">
-            <label for="damagedArea">Damaged area / ພື້ນທີ່ເສຍຫາຍ
-                <small style="font-weight:400;color:var(--muted);">(m²)</small>
-            </label>
-            <input type="number" id="damagedArea" min="0" step="1" inputmode="numeric" placeholder="e.g. 45">
-            <small class="hint">Square meters of damaged roof / ຕາຣາງແມັດທີ່ເສຍຫາຍ</small>
         </div>
         <div class="score" id="scoreDisplay">
             📊 Damage Score: <span id="scoreValue">0</span> / 70
@@ -946,7 +944,7 @@
     </div>
 
     <footer>
-        <p><strong>v5.3</strong> • SSVP Laos Emergency Response Team</p>
+        <p><strong>v5.4</strong> • SSVP Laos Emergency Response Team</p>
         <p style="margin-top:6px; line-height:1.5;">
             <strong>📄 Android / Samsung:</strong> Tap "Save as PDF" → choose <em>"Save as PDF"</em> destination → tap Save.
         </p>
@@ -979,7 +977,7 @@
         'Received','Survey ID','Survey Date','Interviewer','Beneficiary',
         'Phone','Village','GPS','HH Size','Children<5','Elderly 65+',
         'Family Professions',
-        'Roof Damage','Electrical Risk','Damaged Area (m²)','Damage Score','Vulnerabilities',
+        'Roof Damage','Damage Roof (m²)','Electrical Risk','Damage Score','Vulnerabilities',
         'Ownership',
         'Helpers Available','Helpers Count','Helpers Date',
         'Aluminum OK','Local Workers','Labor Cost (LAK/m²)',
@@ -990,7 +988,7 @@
       new Date(), d.surveyId, d.date, d.interviewer, d.beneficiary,
       d.phone, d.village, d.gps, d.hhSize, d.hhChildren, d.hhElderly,
       (d.memberJobs || []).join(' · '),
-      d.roofText, d.elecText, d.damagedArea, d.score, d.vuln,
+      d.roofText, d.damagedArea, d.elecText, d.score, d.vuln,
       d.ownership,
       d.helpersAvailable, d.helpersCount, d.helpersDate,
       d.aluminumOk, d.localWorkers, d.laborCost,
@@ -1045,8 +1043,8 @@
     <div class="pdf-section-title">Damage Assessment / ການປະເມີນຄວາມເສຍຫາຍ</div>
     <div class="pdf-grid">
         <div class="pdf-field"><span class="label">Roof Damage / ຫຼັງຄາ</span><div class="value" id="pdfRoof"></div></div>
+        <div class="pdf-field"><span class="label">Damage Roof in m² / ຫຼັງຄາ ຕາຣາງແມັດ</span><div class="value" id="pdfDamagedArea"></div></div>
         <div class="pdf-field"><span class="label">Electrical Risk / ຄວາມສ່ຽງໄຟຟ້າ</span><div class="value" id="pdfElec"></div></div>
-        <div class="pdf-field"><span class="label">Damaged Area / ພື້ນທີ່ເສຍຫາຍ (m²)</span><div class="value" id="pdfDamagedArea"></div></div>
         <div class="pdf-field"><span class="label">Ownership / ກຳມະສິດ</span><div class="value" id="pdfOwnership"></div></div>
     </div>
 
@@ -1137,7 +1135,7 @@
         'hhSize', 'hhChildren', 'hhElderly',
         'member1Job', 'member2Job', 'member3Job', 'member4Job', 'member5Job',
         'village', 'gps',
-        'roofDamage', 'electricalRisk', 'damagedArea',
+        'roofDamage', 'damagedArea', 'electricalRisk',
         'ownership',
         'helpersAvailable', 'helpersCount', 'helpersDate',
         'aluminumOk', 'localWorkers', 'laborCost',
@@ -1461,8 +1459,8 @@
             '💼 Professions: ' + jobsLine,
             '─────────────────────',
             '🏚️ Roof: ' + d.roofText,
+            '📐 Damage roof in m²: ' + areaLine,
             '⚡ Electrical: ' + d.elecText,
-            '📐 Damaged area: ' + areaLine,
             '📊 Damage score: ' + d.score + ' / 70',
             '🫂 Vulnerabilities: ' + d.vuln,
             '📄 Ownership: ' + d.ownership,
