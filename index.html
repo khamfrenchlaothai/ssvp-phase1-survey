@@ -760,6 +760,17 @@
                 <input type="number" id="hhElderly" min="0" max="20" inputmode="numeric" placeholder="0">
             </div>
         </div>
+
+        <div class="field">
+            <label>Family members' professions / ອາຊີບສະມາຊິກໃນຄອບຄົວ
+                <small style="font-weight:400;color:var(--muted);">(up to 5, optional)</small>
+            </label>
+            <input type="text" id="member1Job" placeholder="1. e.g. Farmer / ຊາວນາ" autocomplete="off">
+            <input type="text" id="member2Job" placeholder="2. e.g. Teacher / ຄູ" style="margin-top:6px" autocomplete="off">
+            <input type="text" id="member3Job" placeholder="3." style="margin-top:6px" autocomplete="off">
+            <input type="text" id="member4Job" placeholder="4." style="margin-top:6px" autocomplete="off">
+            <input type="text" id="member5Job" placeholder="5." style="margin-top:6px" autocomplete="off">
+        </div>
     </section>
 
     <section>
@@ -807,6 +818,13 @@
                 <option value="15">🟡 Water ingress / ນ້ຳຮົ່ວ</option>
                 <option value="30">🔴 Exposed wires / ສາຍໄຟເປືອຍ (Emergency)</option>
             </select>
+        </div>
+        <div class="field">
+            <label for="damagedArea">Damaged area / ພື້ນທີ່ເສຍຫາຍ
+                <small style="font-weight:400;color:var(--muted);">(m²)</small>
+            </label>
+            <input type="number" id="damagedArea" min="0" step="1" inputmode="numeric" placeholder="e.g. 45">
+            <small class="hint">Square meters of damaged roof / ຕາຣາງແມັດທີ່ເສຍຫາຍ</small>
         </div>
         <div class="score" id="scoreDisplay">
             📊 Damage Score: <span id="scoreValue">0</span> / 70
@@ -928,7 +946,7 @@
     </div>
 
     <footer>
-        <p><strong>v5.2</strong> • SSVP Laos Emergency Response Team</p>
+        <p><strong>v5.3</strong> • SSVP Laos Emergency Response Team</p>
         <p style="margin-top:6px; line-height:1.5;">
             <strong>📄 Android / Samsung:</strong> Tap "Save as PDF" → choose <em>"Save as PDF"</em> destination → tap Save.
         </p>
@@ -960,7 +978,8 @@
       sheet.appendRow([
         'Received','Survey ID','Survey Date','Interviewer','Beneficiary',
         'Phone','Village','GPS','HH Size','Children<5','Elderly 65+',
-        'Roof Damage','Electrical Risk','Damage Score','Vulnerabilities',
+        'Family Professions',
+        'Roof Damage','Electrical Risk','Damaged Area (m²)','Damage Score','Vulnerabilities',
         'Ownership',
         'Helpers Available','Helpers Count','Helpers Date',
         'Aluminum OK','Local Workers','Labor Cost (LAK/m²)',
@@ -970,7 +989,8 @@
     sheet.appendRow([
       new Date(), d.surveyId, d.date, d.interviewer, d.beneficiary,
       d.phone, d.village, d.gps, d.hhSize, d.hhChildren, d.hhElderly,
-      d.roofText, d.elecText, d.score, d.vuln,
+      (d.memberJobs || []).join(' · '),
+      d.roofText, d.elecText, d.damagedArea, d.score, d.vuln,
       d.ownership,
       d.helpersAvailable, d.helpersCount, d.helpersDate,
       d.aluminumOk, d.localWorkers, d.laborCost,
@@ -1019,13 +1039,15 @@
         <div class="pdf-field"><span class="label">Household Size / ຈຳນວນຄົນ</span><div class="value" id="pdfHH"></div></div>
         <div class="pdf-field"><span class="label">Village / ບ້ານ (Sikhottabong)</span><div class="value" id="pdfVillage"></div></div>
         <div class="pdf-field"><span class="label">GPS / ພິກັດ</span><div class="value" id="pdfGPS"></div></div>
+        <div class="pdf-field pdf-wide"><span class="label">Family Members' Professions / ອາຊີບ</span><div class="value" id="pdfJobs"></div></div>
     </div>
 
     <div class="pdf-section-title">Damage Assessment / ການປະເມີນຄວາມເສຍຫາຍ</div>
     <div class="pdf-grid">
         <div class="pdf-field"><span class="label">Roof Damage / ຫຼັງຄາ</span><div class="value" id="pdfRoof"></div></div>
         <div class="pdf-field"><span class="label">Electrical Risk / ຄວາມສ່ຽງໄຟຟ້າ</span><div class="value" id="pdfElec"></div></div>
-        <div class="pdf-field pdf-wide"><span class="label">Ownership / ກຳມະສິດ</span><div class="value" id="pdfOwnership"></div></div>
+        <div class="pdf-field"><span class="label">Damaged Area / ພື້ນທີ່ເສຍຫາຍ (m²)</span><div class="value" id="pdfDamagedArea"></div></div>
+        <div class="pdf-field"><span class="label">Ownership / ກຳມະສິດ</span><div class="value" id="pdfOwnership"></div></div>
     </div>
 
     <div class="pdf-section-title">Repair Capacity / ຄວາມສາມາດໃນການສ້ອມແປງ</div>
@@ -1113,8 +1135,9 @@
     const FIELD_IDS = [
         'interviewer', 'surveyDateInput', 'beneficiary', 'phone',
         'hhSize', 'hhChildren', 'hhElderly',
+        'member1Job', 'member2Job', 'member3Job', 'member4Job', 'member5Job',
         'village', 'gps',
-        'roofDamage', 'electricalRisk',
+        'roofDamage', 'electricalRisk', 'damagedArea',
         'ownership',
         'helpersAvailable', 'helpersCount', 'helpersDate',
         'aluminumOk', 'localWorkers', 'laborCost',
@@ -1158,6 +1181,10 @@
         const vuln = Array.from(document.querySelectorAll('.vuln:checked'))
             .map(cb => cb.value);
 
+        const memberJobs = [1,2,3,4,5]
+            .map(n => $('member' + n + 'Job').value.trim())
+            .filter(Boolean);
+
         return {
             surveyId:   $('surveyId').textContent,
             date:       date,
@@ -1166,6 +1193,8 @@
             hhSize:     $('hhSize').value || '',
             hhChildren: $('hhChildren').value || '',
             hhElderly:  $('hhElderly').value || '',
+            memberJobs: memberJobs,
+            damagedArea: $('damagedArea').value || '',
             roofText, elecText, score,
             vuln:       vuln.length ? vuln.join(', ') : 'None',
             ownership:  $('ownership').value,
@@ -1413,6 +1442,10 @@
         const costLine = d.laborCost
             ? Number(d.laborCost).toLocaleString() + ' LAK / m²'
             : 'Not specified';
+        const jobsLine = (d.memberJobs && d.memberJobs.length)
+            ? d.memberJobs.join(' · ')
+            : 'Not specified';
+        const areaLine = d.damagedArea ? d.damagedArea + ' m²' : 'Not specified';
 
         return [
             '📋 SSVP LAOS — PHASE 1 SURVEY',
@@ -1425,9 +1458,11 @@
             '📍 Village: ' + d.village,
             '🗺️ GPS: ' + d.gps,
             '👨‍👩‍👧 Household: ' + (d.hhSize || '?') + ' (children<5: ' + (d.hhChildren || '0') + ', elderly: ' + (d.hhElderly || '0') + ')',
+            '💼 Professions: ' + jobsLine,
             '─────────────────────',
             '🏚️ Roof: ' + d.roofText,
             '⚡ Electrical: ' + d.elecText,
+            '📐 Damaged area: ' + areaLine,
             '📊 Damage score: ' + d.score + ' / 70',
             '🫂 Vulnerabilities: ' + d.vuln,
             '📄 Ownership: ' + d.ownership,
@@ -1489,9 +1524,15 @@
             `Total: ${d.hhSize || '?'} · Children<5: ${d.hhChildren || '0'} · Elderly 65+: ${d.hhElderly || '0'}`;
         $('pdfHH').textContent = hh;
 
-        $('pdfRoof').textContent      = blank ? '' : (d.roofText || dash);
-        $('pdfElec').textContent      = blank ? '' : (d.elecText || dash);
-        $('pdfOwnership').textContent = blank ? '' : (d.ownership || dash);
+        const jobs = blank ? ''
+            : ((d.memberJobs && d.memberJobs.length) ? d.memberJobs.join(' · ') : 'Not specified');
+        $('pdfJobs').textContent = jobs;
+
+        $('pdfRoof').textContent        = blank ? '' : (d.roofText || dash);
+        $('pdfElec').textContent        = blank ? '' : (d.elecText || dash);
+        $('pdfDamagedArea').textContent = blank ? '' :
+            (d.damagedArea ? d.damagedArea + ' m²' : 'Not specified');
+        $('pdfOwnership').textContent   = blank ? '' : (d.ownership || dash);
 
         // Repair capacity
         if (blank) {
